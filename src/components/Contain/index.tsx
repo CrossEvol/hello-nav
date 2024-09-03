@@ -3,14 +3,16 @@ import './index.less'
 
 const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean) => (
   <ul className="app-list">
-    {list.map(cell => (
-      <Cell
-        {...cell}
-        title={cate?.title}
-        isSettingMode={isSettingMode}
-        key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
-      />
-    ))}
+    {list
+      .sort((a, b) => a.order! - b.order!)
+      .map(cell => (
+        <Cell
+          {...cell}
+          title={cate?.title}
+          isSettingMode={isSettingMode}
+          key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
+        />
+      ))}
     {/* {isSettingMode && cate?.title !== 'favorites' && <PlaceholderCell key="empty" />} */}
   </ul>
 )

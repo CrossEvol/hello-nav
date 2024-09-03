@@ -18,6 +18,7 @@ const main = async () => {
       if (err) {
         console.error(err)
       } else {
+        console.log('=========================>')
         console.log('seed libraries finished.')
       }
     },

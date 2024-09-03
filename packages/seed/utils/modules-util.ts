@@ -8,8 +8,9 @@ async function getModules(): Promise<CateItem[]> {
 
   return Object.keys(context).map((filePath: string) => ({
     title: filePath.replace(PATH_REG, (_, $1) => $1.replace('_', '/')),
-    children: context[filePath].map((item) => ({
+    children: context[filePath].map((item, index) => ({
       ...item,
+      order: index + 1,
       icon: getIconUrl(item.icon),
     })),
   }))
@@ -18,13 +19,12 @@ async function getModules(): Promise<CateItem[]> {
 async function loadModules(dir: string): Promise<Record<string, AppItem[]>> {
   const modules: Record<string, AppItem[]> = {}
 
-  console.log('dir = ', dir)
+  console.log(`traverse the file system [${dir}]...`)
   const files = fs.readdirSync(dir)
-
-  console.log('files = ', JSON.stringify(files))
 
   for (const file of files) {
     if (file.endsWith('.ts')) {
+      console.log(`read the file ${file}`)
       const filePath = path.join('../', dir, file)
       // const module = await import(filePath.replaceAll('.ts', ''))
       const module = await import(

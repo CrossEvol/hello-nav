@@ -11,6 +11,7 @@ declare interface AppItem {
   hidden?: boolean
   first?: boolean
   final?: boolean
+  order?: number
 }
 
 declare interface CateItem {
