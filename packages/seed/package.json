@@ -1,0 +1,20 @@
+{
+  "name": "seed",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "compression": "^1.7.4",
+    "sirv": "^2.0.4"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "prettier": "^3.3.3",
+    "tsx": "^4.19.0",
+    "typescript": "^5.4.5",
+    "vite": "^5.2.10"
+  }
+}
