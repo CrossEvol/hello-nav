@@ -1,6 +1,8 @@
 import libraryTree from '@hello-nav/model'
-import { useContext, useEffect, useState } from 'react'
+import { useAtom } from 'jotai'
+import { useContext, useState } from 'react'
 import { AppsContext } from '../../hooks/index'
+import { TypeAtom } from '../../providers/jotai-provider'
 import { IGNORE_KEYWORD_REG, transformAppKeyWords } from '../../utils'
 import ActionBar from '../ActionBar'
 import ContainWrap from '../Contain'
@@ -9,8 +11,6 @@ import Sidebar from '../Sidebar'
 import WithError from '../WithError'
 import Message from '../WithError/Message'
 
-export const __CATEGORY_TYPE__ = '__CATEGORY_TYPE__'
-const CATEGORY_TYPES: CategoryTypes = ['category', 'list']
 const ContainWithNotFind = WithError<ContainWrapProp>(ContainWrap, Message)
 
 const libraryMap: LibraryMap = {
@@ -36,10 +36,7 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
 }
 
 function App() {
-  const [type, setType] = useState<CategoryType>(CATEGORY_TYPES[0])
-  if (localStorage.getItem(__CATEGORY_TYPE__) === null) {
-    localStorage.setItem(__CATEGORY_TYPE__, type)
-  }
+  const [type, setType] = useAtom(TypeAtom)
 
   const [isSettingMode, setIsSettingMode] = useState(false)
   const { favoriteApps, filterKey, setFilterKey } = useContext(AppsContext)
@@ -57,13 +54,8 @@ function App() {
 
   let filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
 
-  useEffect(() => {
-    localStorage.setItem(__CATEGORY_TYPE__, type)
-  }, [type])
-
   function toggleType() {
-    const typeIndex = CATEGORY_TYPES.indexOf(type)
-    setType(CATEGORY_TYPES[(typeIndex + 1) % 2])
+    setType(type === 'list' ? 'category' : 'list')
   }
 
   const resultAppCount =

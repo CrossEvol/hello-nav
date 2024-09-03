@@ -22,7 +22,6 @@ declare interface CateItem {
 }
 
 declare type CategoryType = 'list' | 'category'
-declare type CategoryTypes = CategoryType[]
 
 declare interface LibraryMap {
   list: AppItem[]

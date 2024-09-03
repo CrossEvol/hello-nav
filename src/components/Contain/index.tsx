@@ -14,11 +14,8 @@ import { useState } from 'react'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
 import './index.less'
-import { __CATEGORY_TYPE__ } from '../App'
 
-const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean) => {
-  const type = localStorage.getItem(__CATEGORY_TYPE__)
-
+const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean, type: CategoryType) => {
   return (
     <ul className="app-list">
       <SortableContext items={list} strategy={verticalListSortingStrategy}>
@@ -70,6 +67,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
       (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
       null,
       isSettingMode,
+      'list',
     )
   } else {
     contain = (appItems as CateItem[]).reduce((vmList: React.ReactElement[], cate: CateItem) => {
@@ -80,7 +78,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
             <h2 className="category-item__title" id={cate.title}>
               {cate.title.toUpperCase()}
             </h2>
-            {Contain(apps, cate, isSettingMode)}
+            {Contain(apps, cate, isSettingMode, 'category')}
           </div>,
         )
       }
@@ -173,7 +171,6 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
 
   return (
     <div className={containClass}>
-      {/* handleDragStar and handleDragEnd will not effect after toggle */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
