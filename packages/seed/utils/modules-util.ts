@@ -8,11 +8,15 @@ async function getModules(): Promise<CateItem[]> {
 
   return Object.keys(context).map((filePath: string) => ({
     title: filePath.replace(PATH_REG, (_, $1) => $1.replace('_', '/')),
-    children: context[filePath].map((item, index) => ({
-      ...item,
-      order: index + 1,
-      icon: getIconUrl(item.icon),
-    })),
+    children: context[filePath].map(
+      (item, index) =>
+        ({
+          ...item,
+          id: index + 1,
+          order: index + 1,
+          icon: getIconUrl(item.icon),
+        }) satisfies AppItem,
+    ),
   }))
 }
 

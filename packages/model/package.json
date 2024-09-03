@@ -5,10 +5,10 @@
   "license": "MIT",
   "description": "Hello Nav model",
   "main": "dist/hello-nav.umd.js",
-  "module": "dist/hello-nav.es.js",
+  "module": "dist/hello-nav.mjs",
   "exports": {
     ".": {
-      "import": "./dist/hello-nav.es.js",
+      "import": "./dist/hello-nav.mjs",
       "require": "./dist/hello-nav.umd.js"
     }
   },
@@ -24,9 +24,5 @@
   ],
   "publishConfig": {
     "access": "public"
-  },
-  "devDependencies": {
-    "@types/node": "^22.5.2",
-    "vite": "^5.4.2"
   }
 }

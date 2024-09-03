@@ -3,10 +3,15 @@ const PATH_REG = /^.*\d{2}-(.*)\.ts$/
 function getModules(context: Record<string, AppItem[]>): CateItem[] {
   return Object.keys(context).map((path: string) => ({
     title: path.replace(PATH_REG, (_, $1) => $1.replace('_', '/')),
-    children: context[path].map(item => ({
-      ...item,
-      icon: getIconUrl(item.icon),
-    })),
+    children: context[path].map(
+      (item, index) =>
+        ({
+          ...item,
+          id: index + 1,
+          order: index + 1,
+          icon: getIconUrl(item.icon),
+        }) satisfies AppItem,
+    ),
   }))
 }
 

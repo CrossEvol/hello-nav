@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 declare interface AppItem {
+  id: number
   name: string
   homepage: string
   repository?: string
