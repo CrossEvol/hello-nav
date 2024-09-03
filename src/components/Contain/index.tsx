@@ -9,42 +9,54 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import {
-  horizontalListSortingStrategy,
-  SortableContext,
-  sortableKeyboardCoordinates,
-  verticalListSortingStrategy,
-} from '@dnd-kit/sortable'
+import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
 import './index.less'
+import { __CATEGORY_TYPE__ } from '../App'
 
-const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean) => (
-  <ul className="app-list">
-    <SortableContext items={list} strategy={verticalListSortingStrategy}>
-      {list
-        .sort((a, b) => a.order! - b.order!)
-        .map(cell => (
-          <SortableItem key={cell.id} id={cell.id.toString()}>
-            <div className="abcdefg">
-              <Cell
-                {...cell}
-                title={cate?.title}
-                isSettingMode={isSettingMode}
-                key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
-              />
-            </div>
-          </SortableItem>
-        ))}
-    </SortableContext>
-    {/* {isSettingMode && cate?.title !== 'favorites' && <PlaceholderCell key="empty" />} */}
-  </ul>
-)
+const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean) => {
+  const type = localStorage.getItem(__CATEGORY_TYPE__)
+
+  return (
+    <ul className="app-list">
+      <SortableContext items={list} strategy={verticalListSortingStrategy}>
+        {type === 'category'
+          ? list
+              .sort((a, b) => a.order! - b.order!)
+              .filter(cell => !!cell.id)
+              .map(cell => (
+                <SortableItem key={`${cell.homepage}-${cell.id}`} id={`${cell.category}-${cell.id}`}>
+                  <Cell
+                    {...cell}
+                    title={cate?.title}
+                    isSettingMode={isSettingMode}
+                    key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
+                  />
+                </SortableItem>
+              ))
+          : list
+              .sort((a, b) => a.order! - b.order!)
+              .filter(cell => !!cell.id)
+              .map(cell => (
+                <Cell
+                  {...cell}
+                  title={cate?.title}
+                  isSettingMode={isSettingMode}
+                  key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
+                />
+              ))}
+      </SortableContext>
+      {/* {isSettingMode && cate?.title !== 'favorites' && <PlaceholderCell key="empty" />} */}
+    </ul>
+  )
+}
 
 function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
+  const [appItems, setAppItems] = useState(list)
   const [isDragging, setIsDragging] = useState(false)
-  const [draggingItem, setDraggingItem] = useState<string>('1')
+  const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -54,9 +66,13 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
 
   let contain
   if (type === 'list') {
-    contain = Contain(list as AppItem[], null, isSettingMode)
+    contain = Contain(
+      (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
+      null,
+      isSettingMode,
+    )
   } else {
-    contain = (list as CateItem[]).reduce((vmList: React.ReactElement[], cate: CateItem) => {
+    contain = (appItems as CateItem[]).reduce((vmList: React.ReactElement[], cate: CateItem) => {
       const { children: apps } = cate
       if (apps.length) {
         vmList.push(
@@ -75,24 +91,89 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
   const containClass = ['contain-wrap', type, isSettingMode ? 'reverse' : ''].join(' ')
 
   function handleDragEnd(event: DragEndEvent) {
+    if (type === 'list') {
+      return
+    }
+
     const { active, over } = event
-    console.log(active)
-    console.log(over)
 
     if (active.id !== over!.id) {
+      // console.log(active)
+      // console.log(over)
+      const [activeCategory, activeID] = (active.id as string).split('-')
+      const [overCategory, overID] = (over!.id as string).split('-')
+      const activeCate = (appItems as CateItem[]).find(item => item.title === activeCategory)
+      const activeItem = activeCate?.children.find(e => e.id.toString() === activeID)
+      const overCate = (appItems as CateItem[]).find(item => (item as CateItem).title === overCategory)
+      const overItem = overCate?.children.find(e => e.id.toString() === overID)
+
+      const newAppItems =
+        activeItem?.category === overItem?.category
+          ? (appItems.map(item => {
+              const appItem = item as CateItem
+              if (appItem.title === activeCate?.title) {
+                return {
+                  ...appItem,
+                  children: appItem.children
+                    .map(item => (item.id.toString() === activeID ? { ...item, order: overItem?.order } : item))
+                    .map(item => (item.id.toString() === overID ? { ...item, order: activeItem?.order } : item))
+                    .sort((a, b) => a.order! - b.order!),
+                }
+              }
+              return appItem
+            }) as CateItem[])
+          : (appItems.map(item => {
+              const appItem = item as CateItem
+              if (appItem.title === activeCate?.title) {
+                return {
+                  ...appItem,
+                  children: appItem.children
+                    .map(item =>
+                      item.id.toString() === activeID
+                        ? { ...overItem, id: activeID, order: activeItem?.order, category: activeItem?.category }
+                        : item,
+                    )
+                    .sort((a, b) => a.order! - b.order!),
+                }
+              }
+              if (appItem.title === overCate?.title) {
+                return {
+                  ...appItem,
+                  children: appItem.children
+                    .map(item =>
+                      item.id.toString() === overID
+                        ? { ...activeItem, id: overID, order: overItem?.order, category: overItem?.category }
+                        : item,
+                    )
+                    .sort((a, b) => a.order! - b.order!),
+                }
+              }
+
+              return appItem
+            }) as CateItem[])
+      setAppItems(newAppItems.sort())
     }
     setIsDragging(false)
   }
 
   function handleDragStart(event: DragStartEvent) {
+    if (type === 'list') {
+      return
+    }
+
     const { active } = event
-    console.log(active)
+    const [activeCate, activeID] = active.id.toString().split('-')
     setIsDragging(true)
-    setDraggingItem(active.id.toString())
+    setDraggingItem(
+      (appItems as CateItem[])
+        .find(cateItem => cateItem.title === activeCate)
+        ?.children.find(appItem => appItem.id.toString() === activeID)!,
+    )
   }
 
   return (
     <div className={containClass}>
+      {/* handleDragStar and handleDragEnd will not effect after toggle */}
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
@@ -100,14 +181,23 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
         onDragEnd={handleDragEnd}
       >
         {contain}
+        <div className="over-lay-lay">
+          <DragOverlay>
+            {isDragging ? (
+              <div className="border-2 border-solid border-purple-800 rounded-lg bg-slate-200">
+                <Cell
+                  {...draggingItem!}
+                  title={draggingItem?.name}
+                  isSettingMode={isSettingMode}
+                  key={
+                    draggingItem?.name + (draggingItem?.favorite ? '_fav' : '') + (draggingItem?.hidden ? '_hid' : '')
+                  }
+                />
+              </div>
+            ) : null}
+          </DragOverlay>
+        </div>
       </DndContext>
-      <DragOverlay>
-        {isDragging ? (
-          <div className="font-bold bg-purple-700 text-white border-dotted border-4 rounded-2xl text-center">
-            {draggingItem}
-          </div>
-        ) : null}
-      </DragOverlay>
     </div>
   )
 }

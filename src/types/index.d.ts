@@ -5,6 +5,7 @@ declare interface AppItem {
   homepage: string
   repository?: string
   icon: string
+  category?: string
   keywords?: string[]
   darkInvert?: true
   lessRadius?: true

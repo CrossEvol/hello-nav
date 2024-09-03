@@ -14,6 +14,7 @@ async function getModules(): Promise<CateItem[]> {
           ...item,
           id: index + 1,
           order: index + 1,
+          category: filePath.replace(PATH_REG, (_, $1) => $1.replace('_', '/')),
           icon: getIconUrl(item.icon),
         }) satisfies AppItem,
     ),

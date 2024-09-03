@@ -9,6 +9,7 @@ import Sidebar from '../Sidebar'
 import WithError from '../WithError'
 import Message from '../WithError/Message'
 
+export const __CATEGORY_TYPE__ = '__CATEGORY_TYPE__'
 const CATEGORY_TYPES: CategoryTypes = ['category', 'list']
 const ContainWithNotFind = WithError<ContainWrapProp>(ContainWrap, Message)
 
@@ -35,10 +36,9 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
 }
 
 function App() {
-  const { __CATEGORY_TYPE__ } = window.localStorage
-  const [type, setType] = useState<CategoryType>(__CATEGORY_TYPE__ || CATEGORY_TYPES[0])
-  if (!__CATEGORY_TYPE__) {
-    window.localStorage.__CATEGORY_TYPE__ = type
+  const [type, setType] = useState<CategoryType>(CATEGORY_TYPES[0])
+  if (localStorage.getItem(__CATEGORY_TYPE__) === null) {
+    localStorage.setItem(__CATEGORY_TYPE__, type)
   }
 
   const [isSettingMode, setIsSettingMode] = useState(false)
@@ -58,7 +58,7 @@ function App() {
   let filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
 
   useEffect(() => {
-    window.localStorage.__CATEGORY_TYPE__ = type
+    localStorage.setItem(__CATEGORY_TYPE__, type)
   }, [type])
 
   function toggleType() {
