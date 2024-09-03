@@ -1,13 +1,13 @@
-import { useState, useContext, useEffect } from 'react'
-import { IGNORE_KEYWORD_REG, transformAppKeyWords } from '../../utils'
-import { AppsContext } from '../../hooks/index'
 import libraryTree from '@hello-nav/model'
+import { useContext, useEffect, useState } from 'react'
+import { AppsContext } from '../../hooks/index'
+import { IGNORE_KEYWORD_REG, transformAppKeyWords } from '../../utils'
 import ActionBar from '../ActionBar'
 import ContainWrap from '../Contain'
+import Footer from '../Footer'
+import Sidebar from '../Sidebar'
 import WithError from '../WithError'
 import Message from '../WithError/Message'
-import Sidebar from '../Sidebar'
-import Footer from '../Footer'
 
 const CATEGORY_TYPES: CategoryTypes = ['category', 'list']
 const ContainWithNotFind = WithError<ContainWrapProp>(ContainWrap, Message)

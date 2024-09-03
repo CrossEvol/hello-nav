@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db": "npx json-server db.json",
-    "nav": "json-server navs.json",
+    "db": "npx json-server db.json --port 3333",
+    "nav": "json-server navs.json --port 3333",
+    "lib": "json-server libraries.json --port 3333",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],

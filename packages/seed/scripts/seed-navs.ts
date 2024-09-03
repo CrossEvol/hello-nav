@@ -1,14 +1,14 @@
 import { writeFile } from 'fs'
-import framework from '../src/module/01-framework'
-import ui_design from '../src/module/02-ui_design'
-import html_css from '../src/module/03-html_css'
-import library from '../src/module/04-library'
-import runtime_server from '../src/module/05-runtime_server'
-import other from '../src/module/06-other'
-import website from '../src/module/07-website'
+import framework from '../module/01-framework'
+import ui_design from '../module/02-ui_design'
+import html_css from '../module/03-html_css'
+import library from '../module/04-library'
+import runtime_server from '../module/05-runtime_server'
+import other from '../module/06-other'
+import website from '../module/07-website'
 
-import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
 
 // Convert import.meta.url to __dirname
 const __filename = fileURLToPath(import.meta.url)
@@ -32,9 +32,9 @@ const main = () => {
     (err) => {
       if (err) {
         console.error(err)
-        return
+      } else {
+        console.log('seed navs finished.')
       }
-      console.log('finished.')
     },
   )
 }

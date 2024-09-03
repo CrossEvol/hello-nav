@@ -1,10 +1,11 @@
 {
-  "name": "seed",
+  "name": "@hello-nav/seed",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "seed": "tsx scripts/seed.ts"
+    "seed:nav": "tsx scripts/seed-navs.ts",
+    "seed:lib": "tsx scripts/seed-libraries.ts"
   },
   "dependencies": {
     "compression": "^1.7.4",
