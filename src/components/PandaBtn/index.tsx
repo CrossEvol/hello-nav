@@ -34,5 +34,5 @@ export default function PandaBtn({ onClick }: PandaBtnProps) {
     }
   }
 
-  return <span className={classNames} onClick={handleClick} onKeyDown={() => {}} />
+  return <span data-tooltip-id="my-tooltip-1" className={classNames} onClick={handleClick} onKeyDown={() => {}} />
 }
