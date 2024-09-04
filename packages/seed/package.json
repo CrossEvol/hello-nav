@@ -12,10 +12,10 @@
     "sirv": "^2.0.4"
   },
   "devDependencies": {
-    "@types/node": "^20.12.7",
+    "@types/node": "^22.5.3",
     "prettier": "^3.3.3",
     "tsx": "^4.19.0",
-    "typescript": "^5.4.5",
-    "vite": "^5.2.10"
+    "typescript": "^5.5.4",
+    "vite": "^5.4.3"
   }
 }
