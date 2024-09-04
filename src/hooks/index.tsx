@@ -1,4 +1,5 @@
-import { useState, useEffect, createContext, useCallback } from 'react'
+import { createContext, useCallback, useEffect, useState } from 'react'
+import { useLibraryMapFromFile } from './use-library-map'
 
 const AppsContext = createContext({
   favoriteApps: [] as Array<AppItem>,
@@ -159,4 +160,5 @@ const AppsProvider = ({ children }: any) => {
   return <AppsContext.Provider value={value}>{children}</AppsContext.Provider>
 }
 
-export { AppsContext, AppsProvider }
+export { AppsContext, AppsProvider, useLibraryMapFromFile }
+

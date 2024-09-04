@@ -101,9 +101,9 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
       const [activeCategory, activeID] = (active.id as string).split('-')
       const [overCategory, overID] = (over!.id as string).split('-')
       const activeCate = (appItems as CateItem[]).find(item => item.title === activeCategory)
-      const activeItem = activeCate?.children.find(e => e.id.toString() === activeID)
+      const activeItem = activeCate?.children.find(e => e.id?.toString() === activeID)
       const overCate = (appItems as CateItem[]).find(item => (item as CateItem).title === overCategory)
-      const overItem = overCate?.children.find(e => e.id.toString() === overID)
+      const overItem = overCate?.children.find(e => e.id?.toString() === overID)
 
       const newAppItems =
         activeItem?.category === overItem?.category
@@ -113,8 +113,8 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
                 return {
                   ...appItem,
                   children: appItem.children
-                    .map(item => (item.id.toString() === activeID ? { ...item, order: overItem?.order } : item))
-                    .map(item => (item.id.toString() === overID ? { ...item, order: activeItem?.order } : item))
+                    .map(item => (item.id?.toString() === activeID ? { ...item, order: overItem?.order } : item))
+                    .map(item => (item.id?.toString() === overID ? { ...item, order: activeItem?.order } : item))
                     .sort((a, b) => a.order! - b.order!),
                 }
               }
@@ -127,7 +127,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
                   ...appItem,
                   children: appItem.children
                     .map(item =>
-                      item.id.toString() === activeID
+                      item.id?.toString() === activeID
                         ? { ...overItem, id: activeID, order: activeItem?.order, category: activeItem?.category }
                         : item,
                     )
@@ -139,7 +139,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
                   ...appItem,
                   children: appItem.children
                     .map(item =>
-                      item.id.toString() === overID
+                      item.id?.toString() === overID
                         ? { ...activeItem, id: overID, order: overItem?.order, category: overItem?.category }
                         : item,
                     )
@@ -165,7 +165,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
     setDraggingItem(
       (appItems as CateItem[])
         .find(cateItem => cateItem.title === activeCate)
-        ?.children.find(appItem => appItem.id.toString() === activeID)!,
+        ?.children.find(appItem => appItem.id?.toString() === activeID)!,
     )
   }
 

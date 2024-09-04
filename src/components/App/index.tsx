@@ -1,26 +1,17 @@
-import libraryTree from '@hello-nav/model'
 import { useAtom } from 'jotai'
 import { useContext, useState } from 'react'
 import { AppsContext } from '../../hooks/index'
 import { TypeAtom } from '../../providers/jotai-provider'
-import { IGNORE_KEYWORD_REG, transformAppKeyWords } from '../../utils'
+import { IGNORE_KEYWORD_REG } from '../../utils'
 import ActionBar from '../ActionBar'
 import ContainWrap from '../Contain'
+import useLibraryFromDexie from '../Dexie/use-library-map-from-dexie'
 import Footer from '../Footer'
 import Sidebar from '../Sidebar'
 import WithError from '../WithError'
 import Message from '../WithError/Message'
 
 const ContainWithNotFind = WithError<ContainWrapProp>(ContainWrap, Message)
-
-const libraryMap: LibraryMap = {
-  category: libraryTree,
-  list: libraryTree.reduce((res: AppItem[], item: CateItem) => {
-    item.children.forEach(transformAppKeyWords)
-    res.push(...item.children)
-    return res
-  }, []),
-}
 
 const filterListByKey = (list: AppItem[], key: string) =>
   list.filter(app => (app.keywords as string[]).some(k => k.includes(key)))
@@ -37,7 +28,7 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
 
 function App() {
   const [type, setType] = useAtom(TypeAtom)
-
+  const libraryMap = useLibraryFromDexie()
   const [isSettingMode, setIsSettingMode] = useState(false)
   const { favoriteApps, filterKey, setFilterKey } = useContext(AppsContext)
   const newFilterKey = filterKey.trim().toLowerCase().replace(IGNORE_KEYWORD_REG, '')

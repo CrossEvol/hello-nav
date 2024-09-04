@@ -1,11 +1,12 @@
 /* eslint-disable no-unused-vars */
 declare interface AppItem {
-  id: number
+  id?: number
   name: string
   homepage: string
   repository?: string
   icon: string
   category?: string
+  categoryID?: number
   keywords?: string[]
   darkInvert?: true
   lessRadius?: true

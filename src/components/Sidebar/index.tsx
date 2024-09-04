@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { ReactSVG } from 'react-svg'
+import iconUIDesign from '../../assets/images/icon-design.svg'
 import iconFavorite from '../../assets/images/icon-favorite-active.svg'
 import iconFramework from '../../assets/images/icon-framework.svg'
-import iconLibrary from '../../assets/images/icon-library.svg'
 import iconHtmlCss from '../../assets/images/icon-html-css.svg'
-import iconUIDesign from '../../assets/images/icon-design.svg'
-import iconServer from '../../assets/images/icon-server.svg'
+import iconLibrary from '../../assets/images/icon-library.svg'
 import iconOther from '../../assets/images/icon-other.svg'
-import iconWebsite from '../../assets/images/icon-website.svg'
+import iconServer from '../../assets/images/icon-server.svg'
 import iconTop from '../../assets/images/icon-top.svg'
+import iconWebsite from '../../assets/images/icon-website.svg'
 import './index.less'
 
 const icons: any = {
