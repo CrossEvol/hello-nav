@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import React from 'react'
-import nav from '../db/libraries.json'
 import { db, Navigation } from '../db'
+import nav from '../db/libraries.json'
 
 export const useLibraryFromDexie = () => {
   let flag = true
@@ -29,9 +29,10 @@ export const useLibraryFromDexie = () => {
       for (const category of categories) {
         const res = await db.navigations.where({ categoryID: category.id }).toArray()
         arr.push({
+          id: category.id!,
           title: category.title,
           children: res.map(item => ({ ...item, icon: item.icon, category: category.title })),
-        })
+        } as CateItem)
         list = list.concat(res)
       }
       // console.log(arr)

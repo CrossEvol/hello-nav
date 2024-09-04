@@ -18,13 +18,16 @@ import './index.less'
 const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean, type: CategoryType) => {
   return (
     <ul className="app-list">
-      <SortableContext items={list} strategy={verticalListSortingStrategy}>
+      <SortableContext
+        items={list.map(item => ({ ...item, id: item.id!.toString() }))}
+        strategy={verticalListSortingStrategy}
+      >
         {type === 'category'
           ? list
               .sort((a, b) => a.order! - b.order!)
               .filter(cell => !!cell.id)
               .map(cell => (
-                <SortableItem key={`${cell.homepage}-${cell.id}`} id={`${cell.category}-${cell.id}`}>
+                <SortableItem key={`${cell.homepage}-${cell.id}`} id={`${cell.categoryID}-${cell.id}`}>
                   <Cell
                     {...cell}
                     title={cate?.title}
@@ -95,14 +98,15 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
 
     const { active, over } = event
 
+    // console.log(active)
+    // console.log(over)
+
     if (active.id !== over!.id) {
-      // console.log(active)
-      // console.log(over)
-      const [activeCategory, activeID] = (active.id as string).split('-')
-      const [overCategory, overID] = (over!.id as string).split('-')
-      const activeCate = (appItems as CateItem[]).find(item => item.title === activeCategory)
+      const [activeCategoryID, activeID] = (active.id as string).split('-')
+      const [overCategoryID, overID] = (over!.id as string).split('-')
+      const activeCate = (appItems as CateItem[]).find(item => item.id?.toString() === activeCategoryID)
       const activeItem = activeCate?.children.find(e => e.id?.toString() === activeID)
-      const overCate = (appItems as CateItem[]).find(item => (item as CateItem).title === overCategory)
+      const overCate = (appItems as CateItem[]).find(item => (item as CateItem).id?.toString() === overCategoryID)
       const overItem = overCate?.children.find(e => e.id?.toString() === overID)
 
       const newAppItems =
@@ -128,7 +132,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
                   children: appItem.children
                     .map(item =>
                       item.id?.toString() === activeID
-                        ? { ...overItem, id: activeID, order: activeItem?.order, category: activeItem?.category }
+                        ? { ...overItem, id: activeID, order: activeItem?.order, categoryID: activeItem?.categoryID }
                         : item,
                     )
                     .sort((a, b) => a.order! - b.order!),
@@ -140,7 +144,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
                   children: appItem.children
                     .map(item =>
                       item.id?.toString() === overID
-                        ? { ...activeItem, id: overID, order: overItem?.order, category: overItem?.category }
+                        ? { ...activeItem, id: overID, order: overItem?.order, categoryID: overItem?.categoryID }
                         : item,
                     )
                     .sort((a, b) => a.order! - b.order!),
@@ -160,11 +164,11 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
     }
 
     const { active } = event
-    const [activeCate, activeID] = active.id.toString().split('-')
+    const [activeCateID, activeID] = active.id.toString().split('-')
     setIsDragging(true)
     setDraggingItem(
       (appItems as CateItem[])
-        .find(cateItem => cateItem.title === activeCate)
+        .find(cateItem => cateItem.id?.toString() === activeCateID)
         ?.children.find(appItem => appItem.id?.toString() === activeID)!,
     )
   }

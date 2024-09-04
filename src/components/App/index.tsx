@@ -20,6 +20,7 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
     return filterListByKey(list as AppItem[], filterKey)
   }
   return (list as CateItem[]).map(cate => ({
+    id: cate.id,
     title: cate.title,
     children: filterListByKey(cate.children, filterKey),
   }))
@@ -35,6 +36,7 @@ function App() {
     type === 'category'
       ? [
           {
+            id: 0,
             title: 'favorites',
             children: favoriteApps,
           },
