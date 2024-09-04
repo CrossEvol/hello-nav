@@ -1,23 +1,37 @@
-import { createContext, useCallback, useEffect, useState } from 'react'
+import { createContext, type PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import { useLibraryMapFromFile } from './use-library-map-from-file'
 import { useLibraryFromDexie } from './use-library-map-from-dexie'
 
 const AppsContext = createContext({
   favoriteApps: [] as Array<AppItem>,
   favoriteAppNames: [] as string[],
-  setFavoriteApps: (apps: Array<AppItem>) => {},
-  toggleFavorite: (app: AppItem) => {},
-  moveLeft: (app: AppItem) => {},
-  moveRight: (app: AppItem) => {},
+  setFavoriteApps: (_: Array<AppItem>) => {
+    console.log(_)
+  },
+  toggleFavorite: (_: AppItem) => {
+    console.log(_)
+  },
+  moveLeft: (_: AppItem) => {
+    console.log(_)
+  },
+  moveRight: (_: AppItem) => {
+    console.log(_)
+  },
   hiddenApps: [] as Array<AppItem>,
   hiddenAppNames: [] as string[],
-  setHiddenApps: (apps: Array<AppItem>) => {},
-  toggleVisible: (app: AppItem) => {},
+  setHiddenApps: (_: Array<AppItem>) => {
+    console.log(_)
+  },
+  toggleVisible: (_: AppItem) => {
+    console.log(_)
+  },
   filterKey: '' as string,
-  setFilterKey: (str: string) => {},
+  setFilterKey: (_: string) => {
+    console.log(_)
+  },
 })
 
-const AppsProvider = ({ children }: any) => {
+const AppsProvider = ({ children }: PropsWithChildren) => {
   // favorite app
   const [favoriteApps, setFavoriteApps] = useState(() => {
     let apps: Array<AppItem> = []
@@ -32,7 +46,9 @@ const AppsProvider = ({ children }: any) => {
           a.final = true
         }
       })
-    } catch (_) {}
+    } catch (error) {
+      console.error(error)
+    }
     return apps
   })
 
@@ -117,7 +133,9 @@ const AppsProvider = ({ children }: any) => {
     try {
       apps = JSON.parse(localStorage.getItem('HELLO_NAV_HIDDEN')!) || []
       apps.forEach(a => (a.hidden = true))
-    } catch (_) {}
+    } catch (err) {
+      console.error(err)
+    }
     return apps
   })
 
@@ -162,4 +180,3 @@ const AppsProvider = ({ children }: any) => {
 }
 
 export { AppsContext, AppsProvider, useLibraryFromDexie, useLibraryMapFromFile }
-

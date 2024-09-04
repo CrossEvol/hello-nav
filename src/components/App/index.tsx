@@ -10,7 +10,7 @@ import Sidebar from '../Sidebar'
 import WithError from '../WithError'
 import Message from '../WithError/Message'
 
-const ContainWithNotFind = WithError<ContainWrapProp>(ContainWrap, Message)
+const ContainWithNotFind = WithError(ContainWrap, Message)
 
 const filterListByKey = (list: AppItem[], key: string) =>
   list.filter(app => (app.keywords as string[]).some(k => k.includes(key)))
@@ -44,7 +44,7 @@ function App() {
         ]
       : [...favoriteApps, ...libraryMap[type]]
 
-  let filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
+  const filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
 
   function toggleType() {
     setType(type === 'list' ? 'category' : 'list')

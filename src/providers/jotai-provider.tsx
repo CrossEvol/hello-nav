@@ -1,7 +1,7 @@
 'use client'
 
 import { atom, Provider } from 'jotai'
-import { PropsWithChildren } from 'react'
+import { type PropsWithChildren } from 'react'
 
 export const TypeAtom = atom<CategoryType>('category')
 

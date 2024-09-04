@@ -1,10 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks'
-import React from 'react'
-import { db, Navigation } from '../db'
+import React, { useCallback, useRef } from 'react'
+import { db, type Navigation } from '../db'
 import nav from '../db/libraries.json'
 
 export const useLibraryFromDexie = () => {
-  let flag = true
+  const flag = useRef(true)
   const categories = useLiveQuery(() => db.categories.toArray(), [])
   const [libraryMap, setLibraryMap] = React.useState<LibraryMap>({ category: [], list: [] })
 
@@ -16,15 +16,15 @@ export const useLibraryFromDexie = () => {
         const id = await db.categories.add({ title })
         if (id) {
           await db.navigations.bulkAdd(items.map(item => ({ ...item, categoryID: id, order: orderID++ }) as Navigation))
-          await db.orderID.bulkAdd(items.map(_ => ({})))
+          await db.orderID.bulkAdd(items.map(() => ({})))
         }
       }
     }
   }
 
-  const buildLibraryMap = async () => {
+  const buildLibraryMap = useCallback(async () => {
     let list = [] as LibraryMap['list']
-    if (!!categories) {
+    if (categories) {
       const arr = [] as LibraryMap['category']
       for (const category of categories) {
         const res = await db.navigations.where({ categoryID: category.id }).toArray()
@@ -39,21 +39,21 @@ export const useLibraryFromDexie = () => {
       // console.log(list)
       setLibraryMap({ category: arr, list })
     }
-  }
+  }, [categories, setLibraryMap])
 
   React.useEffect(() => {
     buildLibraryMap()
 
     return () => {}
-  }, [categories?.length])
+  }, [categories?.length, buildLibraryMap])
 
   React.useEffect(() => {
-    if (flag) {
+    if (flag.current.valueOf()) {
       setupNavAppDatabase()
     }
 
     return () => {
-      flag = false
+      flag.current = false
     }
   }, [])
 

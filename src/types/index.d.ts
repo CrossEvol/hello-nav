@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 declare interface AppItem {
   id?: number
   name: string
@@ -34,8 +33,8 @@ declare interface FilterProps {
   onInput(e: React.FormEvent): void
   onClear(): void
   filterKey: string
-  toggleType: any
-  toggleSetting: any
+  toggleType: () => void
+  toggleSetting: () => void
   type: string
 }
 
@@ -45,6 +44,10 @@ declare interface ContainWrapProp {
 }
 
 declare interface WithErrorProps {
+  list: AppItem[] | CateItem[]
+  type: string
+  filterKey: string
+  isSettingMode: boolean
+  resultAppCount: number
   isError: boolean
-  [propName: string]: any
 }

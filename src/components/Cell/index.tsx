@@ -10,7 +10,9 @@ function onClickApp(appItem: AppItem) {
       event_label: 'app',
       value: appItem.name,
     })
-  } catch (e) {}
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
@@ -22,14 +24,16 @@ function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
       event_label: 'app-repo',
       value: appItem.name,
     })
-  } catch (e) {}
+  } catch (err) {
+    console.error(err)
+  }
   window.open(appItem.repository)
   return false
 }
 
 const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boolean }) => {
   const { name, icon, homepage, repository, darkInvert, lessRadius, title } = appItem
-  const { favoriteAppNames, hiddenAppNames, filterKey, moveLeft, moveRight, toggleFavorite, toggleVisible } =
+  const { favoriteAppNames, hiddenAppNames, filterKey, moveLeft, moveRight, toggleFavorite /* toggleVisible */ } =
     useContext(AppsContext)
   const imgClass = [darkInvert ? 'dark-invert' : '', lessRadius ? 'less-radius' : ''].join(' ')
   const size =
@@ -46,7 +50,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
   const isFavoriteApp =
     (!title || title !== 'favorites') && !appItem.favorite && favoriteAppNames.includes(appItem.name)
   const isHiddenApp = hiddenAppNames.includes(appItem.name)
-  const visible = isHiddenApp ? appItem.isSettingMode : true || isFavoriteApp
+  // const visible = isHiddenApp ? appItem.isSettingMode : true || isFavoriteApp
 
   return !isFavoriteApp ? (
     <li className={`cell ${isHiddenApp ? 'hide' : ''} ${appItem.favorite ? 'favorite' : ''}`}>

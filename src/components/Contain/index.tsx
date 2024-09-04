@@ -1,9 +1,9 @@
 import {
   closestCenter,
   DndContext,
-  DragEndEvent,
+  type DragEndEvent,
   DragOverlay,
-  DragStartEvent,
+  type DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -166,11 +166,14 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
     const { active } = event
     const [activeCateID, activeID] = active.id.toString().split('-')
     setIsDragging(true)
-    setDraggingItem(
-      (appItems as CateItem[])
-        .find(cateItem => cateItem.id?.toString() === activeCateID)
-        ?.children.find(appItem => appItem.id?.toString() === activeID)!,
-    )
+    const newDraggingItem = (appItems as CateItem[])
+      .find(cateItem => cateItem.id?.toString() === activeCateID)
+      ?.children.find(appItem => appItem.id?.toString() === activeID)
+    if (newDraggingItem) {
+      setDraggingItem(newDraggingItem)
+    } else {
+      console.error('can not set dragging item.')
+    }
   }
 
   return (
@@ -185,7 +188,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
         <div className="over-lay-lay">
           <DragOverlay>
             {isDragging ? (
-              <div className="border-2 border-solid border-purple-800 rounded-lg bg-slate-200">
+              <div className="rounded-lg border-2 border-solid border-purple-800 bg-slate-200">
                 <Cell
                   {...draggingItem!}
                   title={draggingItem?.name}

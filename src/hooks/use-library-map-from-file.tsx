@@ -20,4 +20,3 @@ const useLibraryMapFromFile = () => {
 }
 
 export { useLibraryMapFromFile }
-

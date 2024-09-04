@@ -1,6 +1,7 @@
 import { resolve, dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import 'zx/globals'
+import { $ } from 'zx'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -8,8 +9,6 @@ const __dirname = dirname(__filename)
 const extensionDir = resolve(__dirname, '../src/extension').replace(/\\/g, '/')
 const distDir = resolve(__dirname, '../dist').replace(/\\/g, '/')
 const outputDir = resolve(__dirname, '../extension').replace(/\\/g, '/')
-
-console.log(outputDir)
 
 await $`mkdir -p ${outputDir}`
 await $`rm -rf ${outputDir}/*`

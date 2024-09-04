@@ -17,7 +17,7 @@
     "build:ext": "npm run build && node ./scripts/build-ext-posix.mjs",
     "build:ext:win": "npm run build && node ./scripts/build-ext-win.mjs",
     "preview": "vite preview",
-    "lint": "eslint . --max-warnings=50",
+    "lint": "eslint ./src --max-warnings=10",
     "prettier": "prettier --write ."
   },
   "dependencies": {

@@ -1,7 +1,11 @@
 import './index.less'
 
-function WithError<T>(Component: React.ComponentType<T | any>, Children: any) {
-  return ({ isError, filterKey, resultAppCount, ...props }: WithErrorProps) =>
+type ChildrenJSX = (value: { filterKey: string }) => JSX.Element
+
+type ComponentJSX = (values: ContainWrapProp & { isSettingMode: boolean }) => JSX.Element
+
+function WithError(Component: ComponentJSX, Children: ChildrenJSX) {
+  const fun = ({ isError, filterKey, resultAppCount, ...props }: WithErrorProps) =>
     isError ? (
       <div className="err-message">
         <Children filterKey={filterKey}></Children>
@@ -12,6 +16,7 @@ function WithError<T>(Component: React.ComponentType<T | any>, Children: any) {
         {filterKey && <div className="result-tips">Total {resultAppCount} found</div>}
       </>
     )
+  return fun
 }
 
 export default WithError

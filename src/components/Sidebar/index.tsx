@@ -11,7 +11,7 @@ import iconTop from '../../assets/images/icon-top.svg'
 import iconWebsite from '../../assets/images/icon-website.svg'
 import './index.less'
 
-const icons: any = {
+const icons: Record<string, string> = {
   favorites: iconFavorite,
   framework: iconFramework,
   library: iconLibrary,
@@ -51,7 +51,9 @@ const Sidebar = ({ list, type, hasFavorite }: ContainWrapProp & { hasFavorite: b
   function goToAnchor(e: React.MouseEvent<HTMLAnchorElement, MouseEvent>, id: string) {
     e.preventDefault()
     const target = document.getElementById(id)
-    target && window.scrollTo({ top: target.offsetTop - 180, behavior: 'smooth' })
+    if (target) {
+      window.scrollTo({ top: target.offsetTop - 180, behavior: 'smooth' })
+    }
     return false
   }
 

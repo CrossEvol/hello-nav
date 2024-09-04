@@ -6,7 +6,7 @@ const modulesPath = resolve(__dirname, '../src/model/modules')
 const moduleNames = fs.readdirSync(modulesPath)
 
 const errLinks: string[] = []
-const pQueue: Promise<any>[] = []
+const pQueue: Promise<unknown>[] = []
 moduleNames.forEach(fileName => {
   const module = require(resolve(modulesPath, fileName))
   module.default.forEach(app => {
