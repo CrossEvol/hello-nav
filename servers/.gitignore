@@ -1,0 +1,6 @@
+public/icons/
+
+*.json
+
+!db.json
+!package.json

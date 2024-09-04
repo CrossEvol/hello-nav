@@ -1,9 +1,10 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import React from 'react'
-import { db, Navigation } from '../../db'
-import nav from './libraries.json'
+import nav from '../db/libraries.json'
+import { db, Navigation } from '../db'
 
-const useLibraryFromDexie = () => {
+export const useLibraryFromDexie = () => {
+  let flag = true
   const categories = useLiveQuery(() => db.categories.toArray(), [])
   const [libraryMap, setLibraryMap] = React.useState<LibraryMap>({ category: [], list: [] })
 
@@ -29,7 +30,7 @@ const useLibraryFromDexie = () => {
         const res = await db.navigations.where({ categoryID: category.id }).toArray()
         arr.push({
           title: category.title,
-          children: res.map(item => ({ ...item, icon: `http://localhost:3333${item.icon}`, category: category.title })),
+          children: res.map(item => ({ ...item, icon: item.icon, category: category.title })),
         })
         list = list.concat(res)
       }
@@ -46,12 +47,14 @@ const useLibraryFromDexie = () => {
   }, [categories?.length])
 
   React.useEffect(() => {
-    setupNavAppDatabase()
+    if (flag) {
+      setupNavAppDatabase()
+    }
 
-    return () => {}
+    return () => {
+      flag = false
+    }
   }, [])
 
   return libraryMap
 }
-
-export default useLibraryFromDexie

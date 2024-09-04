@@ -1,7 +1,7 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import React from 'react'
 import { db, Navigation } from '../../db'
-import nav from './libraries.json'
+import nav from '../../db/libraries.json'
 
 const DexieApp = () => {
   const navigations = useLiveQuery(() => db.navigations.toArray(), [])

@@ -10,7 +10,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
     <AppsProvider>
       <JotaiProvider>
         <App />
-        {/* <DexieApp /> */}
       </JotaiProvider>
     </AppsProvider>
   </React.StrictMode>,

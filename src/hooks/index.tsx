@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from 'react'
-import { useLibraryMapFromFile } from './use-library-map'
+import { useLibraryMapFromFile } from './use-library-map-from-file'
+import { useLibraryFromDexie } from './use-library-map-from-dexie'
 
 const AppsContext = createContext({
   favoriteApps: [] as Array<AppItem>,
@@ -160,5 +161,5 @@ const AppsProvider = ({ children }: any) => {
   return <AppsContext.Provider value={value}>{children}</AppsContext.Provider>
 }
 
-export { AppsContext, AppsProvider, useLibraryMapFromFile }
+export { AppsContext, AppsProvider, useLibraryFromDexie, useLibraryMapFromFile }
 
