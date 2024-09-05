@@ -4,7 +4,6 @@ about: Request app(s)
 title: Request (app-name)
 labels: request
 assignees: Heroor
-
 ---
 
 ## Request app(s):

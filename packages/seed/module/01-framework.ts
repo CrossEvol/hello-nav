@@ -397,7 +397,14 @@ export default <AppItem[]>[
   {
     homepage: 'https://developers.weixin.qq.com/miniprogram/dev/framework/',
     icon: 'wechatmp.png',
-    keywords: ['微信小程序', 'weixin', 'wechat', 'xiaochengxu', 'miniapp', 'microapp'],
+    keywords: [
+      '微信小程序',
+      'weixin',
+      'wechat',
+      'xiaochengxu',
+      'miniapp',
+      'microapp',
+    ],
     name: '微信小程序',
   },
   {
@@ -409,13 +416,27 @@ export default <AppItem[]>[
   {
     homepage: 'https://open.alipay.com/',
     icon: 'alipaymp.png',
-    keywords: ['支付宝小程序', 'zhifubao', 'alipay', 'xiaochengxu', 'miniapp', 'microapp'],
+    keywords: [
+      '支付宝小程序',
+      'zhifubao',
+      'alipay',
+      'xiaochengxu',
+      'miniapp',
+      'microapp',
+    ],
     name: '支付宝小程序',
   },
   {
     homepage: 'https://mp.jd.com/',
     icon: 'jdmp.png',
-    keywords: ['京东小程序', 'jingdong', 'jdmp', 'xiaochengxu', 'miniapp', 'microapp'],
+    keywords: [
+      '京东小程序',
+      'jingdong',
+      'jdmp',
+      'xiaochengxu',
+      'miniapp',
+      'microapp',
+    ],
     name: '京东小程序',
   },
   {
@@ -427,7 +448,14 @@ export default <AppItem[]>[
   {
     homepage: 'https://open.microapp.bytedance.com/',
     icon: 'bytemp.png',
-    keywords: ['字节小程序', '字节跳动小程序', 'bytedance', 'xiaochengxu', 'miniapp', 'microapp'],
+    keywords: [
+      '字节小程序',
+      '字节跳动小程序',
+      'bytedance',
+      'xiaochengxu',
+      'miniapp',
+      'microapp',
+    ],
     name: '字节小程序',
   },
   {

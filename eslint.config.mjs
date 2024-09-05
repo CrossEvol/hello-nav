@@ -37,7 +37,7 @@ export default [
       '**/doc',
       '**/scripts',
       '**/test',
-      '**/vite-env.d.ts'
+      '**/vite-env.d.ts',
     ],
   },
   ...compat.extends(
@@ -93,26 +93,26 @@ export default [
       'tailwindcss/classnames-order': 'warn',
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/no-contradicting-classname': 'error',
-      "@typescript-eslint/consistent-type-imports": [
-        "warn",
+      '@typescript-eslint/consistent-type-imports': [
+        'warn',
         {
-          prefer: "type-imports",
-          fixStyle: "inline-type-imports",
+          prefer: 'type-imports',
+          fixStyle: 'inline-type-imports',
         },
       ],
-      "no-mixed-operators": [
-        "error",
+      'no-mixed-operators': [
+        'error',
         {
-          "groups": [
-            ["+", "-", "*", "/", "%", "**"],
-            ["&", "|", "^", "~", "<<", ">>", ">>>"],
-            ["==", "!=", "===", "!==", ">", ">=", "<", "<="],
-            ["&&", "||"],
-            ["in", "instanceof"]
+          groups: [
+            ['+', '-', '*', '/', '%', '**'],
+            ['&', '|', '^', '~', '<<', '>>', '>>>'],
+            ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
+            ['&&', '||'],
+            ['in', 'instanceof'],
           ],
-          "allowSamePrecedence": true
-        }
-      ]
+          allowSamePrecedence: true,
+        },
+      ],
     },
   },
 ]
