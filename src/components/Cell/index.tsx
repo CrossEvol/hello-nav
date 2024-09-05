@@ -54,7 +54,14 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
 
   return !isFavoriteApp ? (
     <li className={`cell ${isHiddenApp ? 'hide' : ''} ${appItem.favorite ? 'favorite' : ''}`}>
-      <a className="app" href={homepage} title={name} onClick={() => onClickApp(appItem)}>
+      <a
+        className="app"
+        target="_blank"
+        href={homepage}
+        title={name}
+        onClick={() => onClickApp(appItem)}
+        rel="noreferrer"
+      >
         <div className="img-box">
           <img src={icon} className={imgClass} alt={name} />
         </div>

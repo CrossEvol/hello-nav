@@ -1,3 +1,3 @@
 /// <reference types="vite/client" />
 
-declare const gtag: any
+declare function gtag(command: 'config' | 'event', trackingId: string, options?: Record<string, any>): void

@@ -1,5 +1,8 @@
+import { useAtom } from 'jotai'
 import React from 'react'
+import { HiOutlineEllipsisVertical } from 'react-icons/hi2'
 import { IoCreateOutline } from 'react-icons/io5'
+import { RiDragDropFill, RiDragDropLine } from 'react-icons/ri'
 import { SiNginxproxymanager } from 'react-icons/si'
 import { TbDatabaseImport, TbPackageExport } from 'react-icons/tb'
 import { ReactSVG } from 'react-svg'
@@ -10,9 +13,11 @@ import iconList from '../../assets/images/icon-list.svg'
 import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
+import { CanDragAtom } from '../../providers/jotai-provider'
 import DrawerApp from '../Drawer/drawer-app'
 import CreateModal from '../Modals/create-modal'
 import PandaBtn from '../PandaBtn'
+import PopoverWrapper from '../Popover/popover-wrapper'
 import './index.less'
 
 function ActionBar({
@@ -24,6 +29,7 @@ function ActionBar({
   onClear,
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
+  const [canDrag, setCanDrag] = useAtom(CanDragAtom)
   const [openCreateModal, setOpenCreateModal] = React.useState(false)
   const [openDrawer, setOpenDrawer] = React.useState(false)
 
@@ -47,22 +53,42 @@ function ActionBar({
           >
             <SiNginxproxymanager />
           </span>
-          <span
-            data-tooltip-id="my-tooltip-export"
-            className="filter-bar__toggle-btn text-xl"
-            onClick={() => alert('2')}
-            onKeyDown={() => {}}
-          >
-            <TbPackageExport />
-          </span>
-          <span
-            data-tooltip-id="my-tooltip-import"
-            className="filter-bar__toggle-btn text-xl"
-            onClick={() => alert('3')}
-            onKeyDown={() => {}}
-          >
-            <TbDatabaseImport />
-          </span>
+          <PopoverWrapper
+            triggerElement={
+              <span className="filter-bar__toggle-btn text-xl" onClick={() => {}} onKeyDown={() => {}}>
+                <HiOutlineEllipsisVertical />
+              </span>
+            }
+            content={
+              <div className="m-1 flex flex-row justify-center space-x-2 text-slate-700">
+                <span
+                  data-tooltip-id="my-tooltip-canDrag"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => setCanDrag(!canDrag)}
+                  onKeyDown={() => {}}
+                >
+                  {canDrag ? <RiDragDropLine /> : <RiDragDropFill />}
+                </span>
+                <span
+                  data-tooltip-id="my-tooltip-export"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => alert('2')}
+                  onKeyDown={() => {}}
+                >
+                  <TbPackageExport />
+                </span>
+                <span
+                  data-tooltip-id="my-tooltip-import"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => alert('3')}
+                  onKeyDown={() => {}}
+                >
+                  <TbDatabaseImport />
+                </span>
+              </div>
+            }
+            position={'below'}
+          />
           <PandaBtn />
           <span
             data-tooltip-id="my-tooltip-2"
@@ -97,6 +123,12 @@ function ActionBar({
         </span>
         <ReactTooltip id="my-tooltip-create" place="bottom" variant="light" content="create" />
         <ReactTooltip id="my-tooltip-admin" place="bottom" variant="light" content="admin" />
+        <ReactTooltip
+          id="my-tooltip-canDrag"
+          place="bottom"
+          variant="light"
+          content={canDrag ? 'CanDrag' : 'CanNotDrag'}
+        />
         <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
         <ReactTooltip id="my-tooltip-import" place="bottom" variant="light" content="import" />
         <ReactTooltip id="my-tooltip-1" place="bottom" variant="light" content="theme" />
