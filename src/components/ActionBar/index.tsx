@@ -9,10 +9,12 @@ import iconSetting from '../../assets/images/icon-setting.svg'
 import { IoCreateOutline } from 'react-icons/io5'
 import { TbPackageExport } from 'react-icons/tb'
 import { TbDatabaseImport } from 'react-icons/tb'
+import { SiNginxproxymanager } from 'react-icons/si'
 import PandaBtn from '../PandaBtn'
 import './index.less'
 import ModalComponent from '../Modals/modal-component'
 import React from 'react'
+import DrawerApp from '../Drawer/drawer-app'
 
 function ActionBar({
   filterKey,
@@ -24,6 +26,7 @@ function ActionBar({
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
   const [openCreateModal, setOpenCreateModal] = React.useState(false)
+  const [openDrawer, setOpenDrawer] = React.useState(false)
 
   return (
     <>
@@ -37,7 +40,14 @@ function ActionBar({
           >
             <IoCreateOutline />
           </span>
-          <ModalComponent open={openCreateModal} setOpen={setOpenCreateModal} />
+          <span
+            data-tooltip-id="my-tooltip-admin"
+            className="filter-bar__toggle-btn text-xl"
+            onClick={() => setOpenDrawer(true)}
+            onKeyDown={() => {}}
+          >
+            <SiNginxproxymanager />
+          </span>
           <span
             data-tooltip-id="my-tooltip-export"
             className="filter-bar__toggle-btn text-xl"
@@ -86,7 +96,10 @@ function ActionBar({
             <ReactSVG className="icon clear-icon" src={iconClear} onClick={onClear} />
           </div>
         </span>
+        <DrawerApp open={openDrawer} setOpen={setOpenDrawer} />
+        <ModalComponent open={openCreateModal} setOpen={setOpenCreateModal} />
         <ReactTooltip id="my-tooltip-create" place="bottom" variant="light" content="create" />
+        <ReactTooltip id="my-tooltip-admin" place="bottom" variant="light" content="admin" />
         <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
         <ReactTooltip id="my-tooltip-import" place="bottom" variant="light" content="import" />
         <ReactTooltip id="my-tooltip-1" place="bottom" variant="light" content="theme" />
