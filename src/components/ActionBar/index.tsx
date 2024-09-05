@@ -1,3 +1,7 @@
+import React from 'react'
+import { IoCreateOutline } from 'react-icons/io5'
+import { SiNginxproxymanager } from 'react-icons/si'
+import { TbDatabaseImport, TbPackageExport } from 'react-icons/tb'
 import { ReactSVG } from 'react-svg'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
 import iconCategory from '../../assets/images/icon-category.svg'
@@ -6,15 +10,10 @@ import iconList from '../../assets/images/icon-list.svg'
 import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
-import { IoCreateOutline } from 'react-icons/io5'
-import { TbPackageExport } from 'react-icons/tb'
-import { TbDatabaseImport } from 'react-icons/tb'
-import { SiNginxproxymanager } from 'react-icons/si'
+import DrawerApp from '../Drawer/drawer-app'
+import CreateModal from '../Modals/create-modal'
 import PandaBtn from '../PandaBtn'
 import './index.less'
-import ModalComponent from '../Modals/modal-component'
-import React from 'react'
-import DrawerApp from '../Drawer/drawer-app'
 
 function ActionBar({
   filterKey,
@@ -97,7 +96,7 @@ function ActionBar({
           </div>
         </span>
         <DrawerApp open={openDrawer} setOpen={setOpenDrawer} />
-        <ModalComponent open={openCreateModal} setOpen={setOpenCreateModal} />
+        <CreateModal open={openCreateModal} setOpen={setOpenCreateModal} />
         <ReactTooltip id="my-tooltip-create" place="bottom" variant="light" content="create" />
         <ReactTooltip id="my-tooltip-admin" place="bottom" variant="light" content="admin" />
         <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
