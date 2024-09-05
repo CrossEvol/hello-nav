@@ -57,3 +57,8 @@ declare interface PropsWithOpen {
   open: boolean
   setOpen: (open: boolean) => void
 }
+
+declare interface PropsWithState<T> {
+  value: T
+  setValue: (value: T) => void
+}

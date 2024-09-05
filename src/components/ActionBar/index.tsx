@@ -95,8 +95,6 @@ function ActionBar({
             <ReactSVG className="icon clear-icon" src={iconClear} onClick={onClear} />
           </div>
         </span>
-        <DrawerApp open={openDrawer} setOpen={setOpenDrawer} />
-        <CreateModal open={openCreateModal} setOpen={setOpenCreateModal} />
         <ReactTooltip id="my-tooltip-create" place="bottom" variant="light" content="create" />
         <ReactTooltip id="my-tooltip-admin" place="bottom" variant="light" content="admin" />
         <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
@@ -105,6 +103,8 @@ function ActionBar({
         <ReactTooltip id="my-tooltip-2" place="bottom" variant="light" content="group" />
         <ReactTooltip id="my-tooltip-3" place="bottom" variant="light" content="setting" />
       </div>
+      <DrawerApp open={openDrawer} setOpen={setOpenDrawer} />
+      <CreateModal open={openCreateModal} setOpen={setOpenCreateModal} />
     </>
   )
 }

@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import Modal from 'react-modal'
+import CreateCategoryForm from './create-category-form'
 import TabsWrapper from './tabs-wrapper'
 
 // Define your custom styles
@@ -10,6 +11,7 @@ const customStyles = {
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
+    paddingRight: '0',
     transform: 'translate(-50%, -50%)',
   },
 }
@@ -52,32 +54,14 @@ const CreateModal = ({ open, setOpen }: PropsWithOpen) => {
         style={customStyles}
         contentLabel="Example Modal"
       >
-        <div className="min-w-96 space-y-4">
+        <div className="max-h-[26rem] min-w-96 space-y-4 overflow-y-scroll">
           {Header}
           <TabsWrapper
             primaryTitle="category"
             secondaryTitle="navigation"
-            primaryNode={
-              <form className="space-y-4 p-4">
-                <input
-                  type="text"
-                  placeholder="Enter something...1"
-                  className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="m-2 flex flex-row justify-end space-x-2">
-                  <button
-                    type="button"
-                    className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-300 hover:bg-blue-600"
-                  >
-                    Submit
-                  </button>
-                  <div className=""></div>
-                  {CloseButton}
-                </div>
-              </form>
-            }
+            primaryNode={<CreateCategoryForm closeAction={CloseButton} />}
             secondaryNode={
-              <form className="space-y-4 p-4">
+              <form className="space-y-4 p-4 pr-0">
                 <input
                   type="text"
                   placeholder="Enter something...2"

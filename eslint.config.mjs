@@ -90,7 +90,13 @@ export default [
       '@typescript-eslint/no-var-requires': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
-      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^.',
+          varsIgnorePattern: '^_',
+        },
+      ],
       'tailwindcss/classnames-order': 'warn',
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/no-contradicting-classname': 'error',
@@ -102,6 +108,8 @@ export default [
           caughtErrors: 'all',
           ignoreRestSiblings: false,
           reportUsedIgnorePattern: false,
+          varsIgnorePattern: '^_',
+          argsIgnorePattern: '^.',
         },
       ],
       '@typescript-eslint/consistent-type-imports': [
