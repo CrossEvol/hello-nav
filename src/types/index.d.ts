@@ -19,6 +19,7 @@ declare interface AppItem {
 declare interface CateItem {
   id?: number
   title: string
+  order?: number
   children: AppItem[]
 }
 
