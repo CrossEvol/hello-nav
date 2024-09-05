@@ -11,6 +11,8 @@ import { TbPackageExport } from 'react-icons/tb'
 import { TbDatabaseImport } from 'react-icons/tb'
 import PandaBtn from '../PandaBtn'
 import './index.less'
+import ModalComponent from '../Modals/modal-component'
+import React from 'react'
 
 function ActionBar({
   filterKey,
@@ -21,6 +23,8 @@ function ActionBar({
   onClear,
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
+  const [openCreateModal, setOpenCreateModal] = React.useState(false)
+
   return (
     <>
       <div className="filter-bar">
@@ -28,11 +32,12 @@ function ActionBar({
           <span
             data-tooltip-id="my-tooltip-create"
             className="filter-bar__toggle-btn text-xl"
-            onClick={() => alert('1')}
+            onClick={() => setOpenCreateModal(true)}
             onKeyDown={() => {}}
           >
             <IoCreateOutline />
           </span>
+          <ModalComponent open={openCreateModal} setOpen={setOpenCreateModal} />
           <span
             data-tooltip-id="my-tooltip-export"
             className="filter-bar__toggle-btn text-xl"

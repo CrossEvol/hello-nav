@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react'
+import { useRef } from 'react'
 import Modal from 'react-modal'
 
 // Define your custom styles
@@ -13,18 +13,8 @@ const customStyles = {
   },
 }
 
-// Ensure the modal is accessible
-if (typeof window !== 'undefined') {
-  Modal.setAppElement('#__next')
-}
-
-const ModalComponent = () => {
+const ModalComponent = ({ open, setOpen }: PropsWithOpen) => {
   const subtitleRef = useRef<HTMLHeadingElement>(null)
-  const [modalIsOpen, setIsOpen] = useState(false)
-
-  const openModal = () => {
-    setIsOpen(true)
-  }
 
   const afterOpenModal = () => {
     if (subtitleRef.current) {
@@ -32,15 +22,15 @@ const ModalComponent = () => {
     }
   }
 
-  const closeModal = () => {
-    setIsOpen(false)
+  const closeModal = (e: React.MouseEvent | React.KeyboardEvent) => {
+    e.stopPropagation()
+    setOpen(false)
   }
 
   return (
     <div>
-      <button onClick={openModal}>Open Modal</button>
       <Modal
-        isOpen={modalIsOpen}
+        isOpen={open}
         onAfterOpen={afterOpenModal}
         onRequestClose={closeModal}
         style={customStyles}

@@ -51,3 +51,8 @@ declare interface WithErrorProps {
   resultAppCount: number
   isError: boolean
 }
+
+declare interface PropsWithOpen {
+  open: boolean
+  setOpen: (open: boolean) => void
+}

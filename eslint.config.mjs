@@ -90,9 +90,20 @@ export default [
       '@typescript-eslint/no-var-requires': 'warn',
       '@typescript-eslint/no-require-imports': 'warn',
       '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
       'tailwindcss/classnames-order': 'warn',
       'tailwindcss/no-custom-classname': 'off',
       'tailwindcss/no-contradicting-classname': 'error',
+      'no-unused-vars': [
+        'warn',
+        {
+          vars: 'all',
+          args: 'none',
+          caughtErrors: 'all',
+          ignoreRestSiblings: false,
+          reportUsedIgnorePattern: false,
+        },
+      ],
       '@typescript-eslint/consistent-type-imports': [
         'warn',
         {
