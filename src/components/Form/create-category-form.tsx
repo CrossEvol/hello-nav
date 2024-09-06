@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React from 'react'
+import React, { useCallback } from 'react'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { db } from '../../db'
@@ -18,19 +18,19 @@ const categorySchema = z.object({
   icon: z.string(),
 })
 
-const currentCategoryOrderID = (await db.config.where({ id: 1 }).toArray())[0].categoryOrderID
-
 const CreateCategoryForm = ({ closeAction }: { closeAction: React.ReactNode }) => {
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    getValues,
     formState: { errors },
   } = useForm<Category>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
       title: '',
-      order: currentCategoryOrderID! + 1,
+      order: 0,
       icon: '',
     },
   })
@@ -39,9 +39,20 @@ const CreateCategoryForm = ({ closeAction }: { closeAction: React.ReactNode }) =
     console.log(data)
     const res = await db.categories.add({ ...data })
     if (res) {
-      await db.config.update(1, { categoryOrderID: currentCategoryOrderID! + 1 })
+      await db.config.update(1, { categoryOrderID: getValues('order') })
     }
   }
+
+  const initOrder = useCallback(async () => {
+    const newOrder = (await db.config.where({ id: 1 }).toArray())[0].categoryOrderID
+    setValue('order', newOrder!)
+  }, [setValue])
+
+  React.useEffect(() => {
+    initOrder()
+
+    return () => {}
+  }, [initOrder])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-lg p-4">
