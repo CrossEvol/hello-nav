@@ -1,5 +1,10 @@
 import React, { useState } from 'react'
 
+type Error = {
+  cause: unknown
+  message: string
+}
+
 const ImageCompressInput: React.FC = () => {
   const [base64Image, setBase64Image] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -13,8 +18,8 @@ const ImageCompressInput: React.FC = () => {
       const compressedBase64 = await compressAndConvertToBase64(blob)
       console.log(`size of compressedBase64 is :`, compressedBase64.length)
       setBase64Image(compressedBase64)
-    } catch (err: any) {
-      setError(err.message)
+    } catch (err: unknown) {
+      setError((err as Error).message)
     }
   }
 

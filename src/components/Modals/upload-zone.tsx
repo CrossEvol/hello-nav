@@ -36,6 +36,7 @@ const UploadZone = ({
       'image/heic': ['.heic'],
       'image/heif': ['.heif'],
     },
+    maxSize: 500_000,
     onDropAccepted(files, event) {
       console.log(files)
     },

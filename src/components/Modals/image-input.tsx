@@ -9,7 +9,18 @@ const ImageInput = ({ value: imageUrl, setValue: setImageUrl }: PropsWithState<s
     try {
       const response = await fetch(url, { method: 'HEAD' })
       const contentType = response.headers.get('Content-Type')
-      return contentType?.startsWith('image/') || false
+      const contentLength = response.headers.get('Content-Length')
+
+      if (!contentType?.startsWith('image/')) {
+        return false
+      }
+
+      if (contentLength && Number(contentLength) > 500_000) {
+        console.error('Image data is larger than 500,000 bytes.')
+        return false
+      }
+
+      return true
     } catch (error) {
       console.error(error)
       return false
