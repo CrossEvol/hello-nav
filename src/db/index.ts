@@ -20,6 +20,7 @@ export type Navigation = {
 export type Category = {
   id?: number
   title: string
+  icon: string
   order?: number
 }
 
@@ -39,7 +40,7 @@ class NavAppDatabase extends Dexie {
     this.version(1).stores({
       navigations:
         '++id, name, homepage, repository, icon, keywords, darkInvert, lessRadius, favorite, hidden, first, final, order, categoryID',
-      categories: '++id, name, order',
+      categories: '++id, name, order, icon',
       config: '++id, categoryOrderID, navigationOrderID',
     })
   }

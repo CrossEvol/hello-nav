@@ -13,10 +13,10 @@ export const useLibraryFromDexie = () => {
     if (count === 0) {
       await db.config.add({ categoryOrderID: 0, navigationOrderID: 0 })
       const res = (await db.config.where({ id: 1 }).toArray())[0]
-      let navOrderID = 0
-      let cateOrderID = 0
+      let navOrderID = 1
+      let cateOrderID = 1
       for (const { title, children: items } of nav.navs) {
-        const id = await db.categories.add({ title, order: cateOrderID++ })
+        const id = await db.categories.add({ title, order: cateOrderID++, icon: '' })
         if (id) {
           await db.navigations.bulkAdd(
             items.map(item => ({ ...item, categoryID: id, order: navOrderID++ }) as Navigation),
