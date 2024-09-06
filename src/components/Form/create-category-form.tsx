@@ -35,8 +35,12 @@ const CreateCategoryForm = ({ closeAction }: { closeAction: React.ReactNode }) =
     },
   })
 
-  const onSubmit: SubmitHandler<Category> = data => {
+  const onSubmit: SubmitHandler<Category> = async data => {
     console.log(data)
+    const res = await db.categories.add({ ...data })
+    if (res) {
+      await db.config.update(1, { categoryOrderID: currentCategoryOrderID! + 1 })
+    }
   }
 
   return (

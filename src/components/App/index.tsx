@@ -22,6 +22,7 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
   return (list as CateItem[]).map(cate => ({
     id: cate.id,
     title: cate.title,
+    icon: cate.icon,
     children: filterListByKey(cate.children, filterKey),
   }))
 }

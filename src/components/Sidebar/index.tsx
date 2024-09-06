@@ -67,7 +67,7 @@ const Sidebar = ({ list, type, hasFavorite }: ContainWrapProp & { hasFavorite: b
     <div className="sidebar">
       <div className="navbar">
         {(list as CateItem[])
-          .filter(v => v.children.length)
+          // .filter(v => v.children.length)
           .map(item => {
             const { title } = item
             return (
@@ -80,7 +80,13 @@ const Sidebar = ({ list, type, hasFavorite }: ContainWrapProp & { hasFavorite: b
                 onClick={e => goToAnchor(e, title)}
               >
                 <div>
-                  <ReactSVG className="icon" src={icons[title]}></ReactSVG>
+                  {Object.keys(icons).includes(title) ? (
+                    <ReactSVG className="icon" src={icons[title]}></ReactSVG>
+                  ) : (
+                    <div className="size-4">
+                      <img src={item.icon} className="h-auto w-4" />
+                    </div>
+                  )}
                 </div>
                 <div className="sidebar__title">{title.toUpperCase()}</div>
               </a>

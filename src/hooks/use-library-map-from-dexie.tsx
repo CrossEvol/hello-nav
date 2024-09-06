@@ -37,8 +37,7 @@ export const useLibraryFromDexie = () => {
       for (const category of categories) {
         const res = await db.navigations.where({ categoryID: category.id }).toArray()
         arr.push({
-          id: category.id!,
-          title: category.title,
+          ...category,
           children: res.map(item => ({ ...item, icon: item.icon, category: category.title })),
         } as CateItem)
         list = list.concat(res)
