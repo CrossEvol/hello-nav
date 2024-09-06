@@ -1,6 +1,9 @@
+import { useAtom } from 'jotai'
 import { useContext } from 'react'
-import { AppsContext } from '../../hooks/index'
 import gitHubIcon from '../../assets/images/github.png'
+import { db } from '../../db'
+import { AppsContext } from '../../hooks/index'
+import { FavoritesCategoryAtom } from '../../providers/jotai-provider'
 import './index.less'
 
 function onClickApp(appItem: AppItem) {
@@ -32,9 +35,16 @@ function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
 }
 
 const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boolean }) => {
+  const [favoritesCategory, setFavoritesCategory] = useAtom(FavoritesCategoryAtom)
   const { name, icon, homepage, repository, darkInvert, lessRadius, title } = appItem
-  const { favoriteAppNames, hiddenAppNames, filterKey, moveLeft, moveRight, toggleFavorite /* toggleVisible */ } =
-    useContext(AppsContext)
+  const {
+    favoriteAppNames,
+    hiddenAppNames,
+    filterKey,
+    moveLeft,
+    moveRight,
+    toggleFavorite: _toggleFavorite /* toggleVisible */,
+  } = useContext(AppsContext)
   const imgClass = [darkInvert ? 'dark-invert' : '', lessRadius ? 'less-radius' : ''].join(' ')
   const size =
     name.length > 11
@@ -98,7 +108,15 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
           )}
           <div
             className={`icon ${appItem.favorite ? 'icon-favorite-active' : 'icon-favorite'}`}
-            onClick={() => toggleFavorite(appItem)}
+            onClick={async () => {
+              const res = await db.navigations.update(appItem.id, { favorite: true })
+              if (res) {
+                const a = await db.navigations.get(appItem.id)!
+                /* TODO: did not re-render */
+                setFavoritesCategory({ ...favoritesCategory, children: [...favoritesCategory.children, a!] })
+              }
+              _toggleFavorite(appItem)
+            }}
           ></div>
           {appItem.favorite && !filterKey && (
             <div

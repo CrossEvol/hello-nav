@@ -10,26 +10,41 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
-import { useState } from 'react'
+import { useAtom } from 'jotai'
+import React, { useState } from 'react'
+import { CanDragAtom } from '../../providers/jotai-provider'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
 import './index.less'
-import { useAtom } from 'jotai'
-import { CanDragAtom } from '../../providers/jotai-provider'
 
-const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean, type: CategoryType) => {
+const Contain = (
+  list: AppItem[],
+  cate: CateItem | null,
+  {
+    isSettingMode,
+    type,
+    canDrag,
+  }: {
+    isSettingMode: boolean
+    type: CategoryType
+    canDrag: boolean
+  },
+) => {
   return (
     <ul className="app-list">
       <SortableContext
         items={list.map(item => ({ ...item, id: item.id!.toString() }))}
         strategy={verticalListSortingStrategy}
       >
-        {type === 'category'
+        {type === 'category' && canDrag
           ? list
               .sort((a, b) => a.order! - b.order!)
               .filter(cell => !!cell.id)
               .map(cell => (
-                <SortableItem key={`${cell.homepage}-${cell.id}`} id={`${cell.categoryID}-${cell.id}-${cell.homepage}`}>
+                <SortableItem
+                  key={`${cell.homepage}-${cell.categoryID}-${cell.id}`}
+                  id={`${cell.categoryID}-${cell.id}-${cell.homepage}`}
+                >
                   <Cell
                     {...cell}
                     title={cate?.title}
@@ -57,7 +72,7 @@ const Contain = (list: AppItem[], cate: CateItem | null, isSettingMode: boolean,
 
 function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
   const [canDrag] = useAtom(CanDragAtom)
-  const [appItems, setAppItems] = useState(list)
+  const [appItems, setAppItems] = useState<AppItem[] | CateItem[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
   const sensors = useSensors(
@@ -72,10 +87,9 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
     contain = Contain(
       (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
       null,
-      isSettingMode,
-      'list',
+      { isSettingMode, type, canDrag },
     )
-  } else {
+  } else if (type === 'category') {
     contain = (appItems as CateItem[]).reduce((vmList: React.ReactElement[], cate: CateItem) => {
       const { children: apps } = cate
       if (apps.length) {
@@ -84,7 +98,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
             <h2 className="category-item__title" id={cate.title}>
               {cate.title.toUpperCase()}
             </h2>
-            {Contain(apps, cate, isSettingMode, 'category')}
+            {Contain(apps, cate, { isSettingMode, type, canDrag })}
           </div>,
         )
       }
@@ -95,14 +109,6 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
   const containClass = ['contain-wrap', type, isSettingMode ? 'reverse' : ''].join(' ')
 
   function handleDragEnd(event: DragEndEvent) {
-    if (!canDrag) {
-      return
-    }
-
-    if (type === 'list') {
-      return
-    }
-
     const { active, over } = event
 
     // console.log(active)
@@ -166,15 +172,6 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
   }
 
   function handleDragStart(event: DragStartEvent) {
-    if (!canDrag) {
-      window.open(event.active.id.toString().split('-')[2])
-      return
-    }
-
-    if (type === 'list') {
-      return
-    }
-
     const { active } = event
     const [activeCateID, activeID] = active.id.toString().split('-')
     setIsDragging(true)
@@ -187,6 +184,11 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
       console.error('can not set dragging item.')
     }
   }
+
+  React.useEffect(() => {
+    setAppItems(list)
+    return () => {}
+  }, [list])
 
   return (
     <div className={containClass}>

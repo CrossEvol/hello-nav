@@ -1,6 +1,6 @@
 import { createContext, type PropsWithChildren, useCallback, useEffect, useState } from 'react'
-import { useLibraryMapFromFile } from './use-library-map-from-file'
 import { useLibraryFromDexie } from './use-library-map-from-dexie'
+import { useLibraryMapFromFile } from './use-library-map-from-file'
 
 const AppsContext = createContext({
   favoriteApps: [] as Array<AppItem>,
@@ -31,6 +31,7 @@ const AppsContext = createContext({
   },
 })
 
+/* TODO: if add item to favorites, will result in hiding or the other categories */
 const AppsProvider = ({ children }: PropsWithChildren) => {
   // favorite app
   const [favoriteApps, setFavoriteApps] = useState(() => {

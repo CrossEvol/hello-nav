@@ -1,7 +1,7 @@
 import { useAtom } from 'jotai'
 import { useContext, useState } from 'react'
 import { AppsContext, useLibraryFromDexie } from '../../hooks/index'
-import { TypeAtom } from '../../providers/jotai-provider'
+import { FavoritesCategoryAtom, TypeAtom } from '../../providers/jotai-provider'
 import { IGNORE_KEYWORD_REG } from '../../utils'
 import ActionBar from '../ActionBar'
 import ContainWrap from '../Contain'
@@ -31,19 +31,11 @@ function App() {
   const [type, setType] = useAtom(TypeAtom)
   const libraryMap = useLibraryFromDexie()
   const [isSettingMode, setIsSettingMode] = useState(false)
-  const { favoriteApps, filterKey, setFilterKey } = useContext(AppsContext)
+  const { /* favoriteApps */ filterKey, setFilterKey } = useContext(AppsContext)
+  const [favoritesCategory] = useAtom(FavoritesCategoryAtom)
   const newFilterKey = filterKey.trim().toLowerCase().replace(IGNORE_KEYWORD_REG, '')
   const libraries: (AppItem | CateItem)[] =
-    type === 'category'
-      ? [
-          {
-            id: 0,
-            title: 'favorites',
-            children: favoriteApps,
-          },
-          ...libraryMap[type],
-        ]
-      : [...favoriteApps, ...libraryMap[type]]
+    type === 'category' ? [favoritesCategory, ...libraryMap[type]] : [favoritesCategory, ...libraryMap[type]]
 
   const filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
 
@@ -77,7 +69,9 @@ function App() {
           isError={!resultAppCount}
         />
       </div>
-      {resultAppCount && <Sidebar list={filteredLibraries} type={type} hasFavorite={!!favoriteApps.length} />}
+      {resultAppCount && (
+        <Sidebar list={filteredLibraries} type={type} hasFavorite={!!favoritesCategory.children.length} />
+      )}
       <Footer />
     </div>
   )
