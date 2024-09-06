@@ -3,7 +3,7 @@ import React from 'react'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { z } from 'zod'
 import { db } from '../../db'
-import ImageInput from './image-input'
+import ImageInput from '../Input/image-input'
 
 export type Category = {
   title: string

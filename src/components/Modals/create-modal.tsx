@@ -1,7 +1,8 @@
 import { useRef } from 'react'
 import Modal from 'react-modal'
-import CreateCategoryForm from './create-category-form'
-import TabsWrapper from './tabs-wrapper'
+import CreateCategoryForm from '../Form/create-category-form'
+import CreateNavigationForm from '../Form/create-navigation-form'
+import TabsWrapper from '../Tabs/tabs-wrapper'
 
 // Define your custom styles
 const customStyles = {
@@ -60,25 +61,7 @@ const CreateModal = ({ open, setOpen }: PropsWithOpen) => {
             primaryTitle="category"
             secondaryTitle="navigation"
             primaryNode={<CreateCategoryForm closeAction={CloseButton} />}
-            secondaryNode={
-              <form className="space-y-4 p-4 pr-0">
-                <input
-                  type="text"
-                  placeholder="Enter something...2"
-                  className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-                <div className="m-2 flex flex-row justify-end space-x-2">
-                  <button
-                    type="button"
-                    className="rounded bg-blue-500 px-4 py-2 text-white transition-colors duration-300 hover:bg-blue-600"
-                  >
-                    Submit
-                  </button>
-                  <div className=""></div>
-                  {CloseButton}
-                </div>
-              </form>
-            }
+            secondaryNode={<CreateNavigationForm />}
           />
         </div>
       </Modal>
