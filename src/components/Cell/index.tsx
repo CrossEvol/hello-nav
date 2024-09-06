@@ -63,7 +63,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
         rel="noreferrer"
       >
         <div className="img-box">
-          <img src={icon} className={imgClass} alt={name} />
+          <img src={icon} className={`${imgClass}`} alt={name} />
         </div>
         <p className="title" data-size={size}>
           {name}

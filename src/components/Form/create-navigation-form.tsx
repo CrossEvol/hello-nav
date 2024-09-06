@@ -16,8 +16,8 @@ export type Navigation = {
   order?: number
   icon: string
   keywords?: string[]
-  darkInvert?: boolean
-  lessRadius?: boolean
+  darkInvert?: true
+  lessRadius?: true
   favorite?: boolean
   hidden?: boolean
   first?: boolean
@@ -31,6 +31,7 @@ const CreateNavigationForm: React.FC = () => {
     handleSubmit,
     control,
     setValue,
+    getValues,
     formState: { errors },
   } = useForm<Navigation>({
     defaultValues: {
@@ -40,12 +41,22 @@ const CreateNavigationForm: React.FC = () => {
       order: 0,
       icon: '',
       keywords: [],
+      darkInvert: true,
+      lessRadius: true,
+      favorite: false,
+      hidden: false,
+      first: false,
+      final: false,
     },
   })
   const [categoryOptions, setCategoryOptions] = React.useState<ColourOption[]>([])
 
-  const onSubmit: SubmitHandler<Navigation> = data => {
+  const onSubmit: SubmitHandler<Navigation> = async data => {
     console.log(data)
+    const res = await db.navigations.add({ ...data })
+    if (res) {
+      await db.config.update(1, { navigationOrderID: getValues('order') })
+    }
   }
 
   const initOrder = useCallback(async () => {
@@ -60,6 +71,7 @@ const CreateNavigationForm: React.FC = () => {
       label: item.title,
       color: chroma.random().hex(),
     })) satisfies ColourOption[]
+    console.log(options)
     setCategoryOptions(options)
   }, [])
 
