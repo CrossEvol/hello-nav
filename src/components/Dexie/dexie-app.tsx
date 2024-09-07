@@ -1,6 +1,6 @@
 import { useLiveQuery } from 'dexie-react-hooks'
 import React, { useCallback } from 'react'
-import { db, type Navigation } from '../../db'
+import { type Navigation, db } from '../../db'
 import nav from '../../db/libraries.json'
 
 const DexieApp = () => {

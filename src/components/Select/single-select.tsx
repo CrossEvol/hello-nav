@@ -1,4 +1,4 @@
-import Select, { components, type SingleValue, type SingleValueProps } from 'react-select'
+import Select, { type SingleValue, type SingleValueProps, components } from 'react-select'
 import { type ColourOption } from './select-data'
 
 const SingleValue = ({ children, ...props }: SingleValueProps<ColourOption>) => (

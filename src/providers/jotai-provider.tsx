@@ -1,4 +1,4 @@
-import { atom, Provider } from 'jotai'
+import { Provider, atom } from 'jotai'
 import { type PropsWithChildren } from 'react'
 
 export const TypeAtom = atom<CategoryType>('category')

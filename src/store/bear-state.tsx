@@ -15,4 +15,9 @@ export interface SharedSlice {
   getLibraryMap: () => LibraryMap
 }
 
-export type BearState = CategorySlice & NavigationSlice & FavoriteSlice & SharedSlice
+export interface ConfigSlice {
+  initialized: boolean
+  initializeDatabase: () => void
+}
+
+export type BearState = SharedSlice & CategorySlice & NavigationSlice & FavoriteSlice & ConfigSlice
