@@ -70,9 +70,8 @@ const Contain = (
   )
 }
 
-function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
+function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
   const [canDrag] = useAtom(CanDragAtom)
-  const [appItems, setAppItems] = useState<AppItem[] | CateItem[]>([])
   const [isDragging, setIsDragging] = useState(false)
   const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
   const sensors = useSensors(
@@ -85,7 +84,8 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
   let contain
   if (type === 'list') {
     contain = Contain(
-      (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
+      // (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
+      appItems as AppItem[],
       null,
       { isSettingMode, type, canDrag },
     )
@@ -166,7 +166,7 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
 
               return appItem
             }) as CateItem[])
-      setAppItems(newAppItems.sort())
+      // setAppItems(newAppItems.sort())
     }
     setIsDragging(false)
   }
@@ -184,11 +184,6 @@ function ContainWrap({ list, type, isSettingMode }: ContainWrapProp & { isSettin
       console.error('can not set dragging item.')
     }
   }
-
-  React.useEffect(() => {
-    setAppItems(list)
-    return () => {}
-  }, [list])
 
   return (
     <div className={containClass}>

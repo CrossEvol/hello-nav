@@ -36,7 +36,9 @@ function App() {
   const { /* favoriteApps */ filterKey, setFilterKey } = useContext(AppsContext)
   const newFilterKey = filterKey.trim().toLowerCase().replace(IGNORE_KEYWORD_REG, '')
   const libraries: (AppItem | CateItem)[] =
-    type === 'category' ? [favoritesCategory, ...libraryMap[type]] : [favoritesCategory, ...libraryMap[type]]
+    type === 'category'
+      ? [favoritesCategory, ...libraryMap[type]]
+      : [/* ...favoritesCategory.children,  */ ...libraryMap[type]]
 
   const filteredLibraries = genFilteredByList(libraries, type, newFilterKey)
 
