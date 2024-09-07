@@ -14,15 +14,6 @@ const getLibraryMap = (categories: CateItem[], navigations: AppItem[]) => {
   return { list: navigations, category: cateItems } satisfies LibraryMap
 }
 
-/* TODO: toggle logic here has some problem */
 export const createSharedSlice: StateCreator<BearState, [], [], SharedSlice> = (set, get, state) => ({
   getLibraryMap: () => getLibraryMap(get().categories, get().navigations),
-  toggleFavorite: (item: AppItem) => {
-    if (item.favorite) {
-      get().removeItemInFavorites(item)
-    } else {
-      get().addItemToFavorites(item)
-    }
-    get().toggleNavigationFavorite(item)
-  },
 })

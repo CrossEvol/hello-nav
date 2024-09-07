@@ -7,5 +7,5 @@ const navigations = await db.navigations.toArray()
 export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSlice> = (set, get) => ({
   navigations,
   toggleNavigationFavorite: (item: AppItem) =>
-    set({ navigations: get().navigations.map(e => (e.id === item.id ? { ...e, favorite: item.favorite } : e)) }),
+    set({ navigations: get().navigations.map(e => (e.id === item.id ? { ...e, favorite: !e.favorite } : e)) }),
 })

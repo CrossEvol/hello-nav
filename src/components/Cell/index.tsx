@@ -34,7 +34,7 @@ function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
 }
 
 const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boolean }) => {
-  const toggleFavorite = useBearStore(state => state.toggleFavorite)
+  const toggleFavorite = useBearStore(state => state.toggleNavigationFavorite)
   const { name, icon, homepage, repository, darkInvert, lessRadius, title } = appItem
   const {
     favoriteAppNames,
