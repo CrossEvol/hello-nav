@@ -98,6 +98,7 @@ function ActionBar({
           >
             <ReactSVG className="icon" src={type === 'list' ? iconList : iconCategory} />
           </span>
+          {/* TODO: undefined error when toggle setting */}
           <span
             data-tooltip-id="my-tooltip-3"
             className="filter-bar__toggle-btn"

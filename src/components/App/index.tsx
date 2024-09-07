@@ -1,7 +1,8 @@
 import { useAtom } from 'jotai'
 import { useContext, useState } from 'react'
-import { AppsContext, useLibraryFromDexie } from '../../hooks/index'
-import { FavoritesCategoryAtom, TypeAtom } from '../../providers/jotai-provider'
+import { AppsContext } from '../../hooks/index'
+import { TypeAtom } from '../../providers/jotai-provider'
+import { useBearStore } from '../../store'
 import { IGNORE_KEYWORD_REG } from '../../utils'
 import ActionBar from '../ActionBar'
 import ContainWrap from '../Contain'
@@ -29,10 +30,10 @@ const genFilteredByList = (list: (AppItem | CateItem)[], type: CategoryType, fil
 
 function App() {
   const [type, setType] = useAtom(TypeAtom)
-  const libraryMap = useLibraryFromDexie()
+  const libraryMap = useBearStore(state => state.getLibraryMap())
+  const favoritesCategory = useBearStore(state => state.getFavoritesCategory())
   const [isSettingMode, setIsSettingMode] = useState(false)
   const { /* favoriteApps */ filterKey, setFilterKey } = useContext(AppsContext)
-  const [favoritesCategory] = useAtom(FavoritesCategoryAtom)
   const newFilterKey = filterKey.trim().toLowerCase().replace(IGNORE_KEYWORD_REG, '')
   const libraries: (AppItem | CateItem)[] =
     type === 'category' ? [favoritesCategory, ...libraryMap[type]] : [favoritesCategory, ...libraryMap[type]]

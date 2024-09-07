@@ -1,9 +1,8 @@
-import { useAtom } from 'jotai'
-import { useContext } from 'react'
+import React, { useContext } from 'react'
 import gitHubIcon from '../../assets/images/github.png'
 import { db } from '../../db'
 import { AppsContext } from '../../hooks/index'
-import { FavoritesCategoryAtom } from '../../providers/jotai-provider'
+import { useBearStore } from '../../store'
 import './index.less'
 
 function onClickApp(appItem: AppItem) {
@@ -35,7 +34,7 @@ function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
 }
 
 const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boolean }) => {
-  const [favoritesCategory, setFavoritesCategory] = useAtom(FavoritesCategoryAtom)
+  const toggleFavorite = useBearStore(state => state.toggleFavorite)
   const { name, icon, homepage, repository, darkInvert, lessRadius, title } = appItem
   const {
     favoriteAppNames,
@@ -109,13 +108,16 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
           <div
             className={`icon ${appItem.favorite ? 'icon-favorite-active' : 'icon-favorite'}`}
             onClick={async () => {
-              const res = await db.navigations.update(appItem.id, { favorite: true })
-              if (res) {
-                const a = await db.navigations.get(appItem.id)!
-                /* TODO: did not re-render */
-                setFavoritesCategory({ ...favoritesCategory, children: [...favoritesCategory.children, a!] })
+              const updateRows = await db.navigations.update(appItem.id, { favorite: !appItem.favorite })
+              if (updateRows) {
+                const targetItem = await db.navigations.get(appItem.id)!
+                if (!targetItem) {
+                  console.error(`can not find navigation itemID#${appItem.id}`)
+                  return
+                }
+                toggleFavorite(targetItem)
               }
-              _toggleFavorite(appItem)
+              // _toggleFavorite(appItem)
             }}
           ></div>
           {appItem.favorite && !filterKey && (
