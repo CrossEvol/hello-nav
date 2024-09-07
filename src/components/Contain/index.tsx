@@ -13,6 +13,7 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'
 import { CanDragAtom } from '../../providers/jotai-provider'
+import { useBearStore } from '../../store'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
 import './index.less'
@@ -74,6 +75,7 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
   const [canDrag] = useAtom(CanDragAtom)
   const [isDragging, setIsDragging] = useState(false)
   const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
+  const swapNavigation = useBearStore(state => state.swapNavigation)
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -117,56 +119,10 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
     if (active.id !== over!.id) {
       const [activeCategoryID, activeID] = (active.id as string).split('-')
       const [overCategoryID, overID] = (over!.id as string).split('-')
-      const activeCate = (appItems as CateItem[]).find(item => item.id?.toString() === activeCategoryID)
-      const activeItem = activeCate?.children.find(e => e.id?.toString() === activeID)
-      const overCate = (appItems as CateItem[]).find(item => (item as CateItem).id?.toString() === overCategoryID)
-      const overItem = overCate?.children.find(e => e.id?.toString() === overID)
-
-      const newAppItems =
-        activeItem?.category === overItem?.category
-          ? (appItems.map(item => {
-              const appItem = item as CateItem
-              if (appItem.title === activeCate?.title) {
-                return {
-                  ...appItem,
-                  children: appItem.children
-                    .map(item => (item.id?.toString() === activeID ? { ...item, order: overItem?.order } : item))
-                    .map(item => (item.id?.toString() === overID ? { ...item, order: activeItem?.order } : item))
-                    .sort((a, b) => a.order! - b.order!),
-                }
-              }
-              return appItem
-            }) as CateItem[])
-          : (appItems.map(item => {
-              const appItem = item as CateItem
-              if (appItem.title === activeCate?.title) {
-                return {
-                  ...appItem,
-                  children: appItem.children
-                    .map(item =>
-                      item.id?.toString() === activeID
-                        ? { ...overItem, id: activeID, order: activeItem?.order, categoryID: activeItem?.categoryID }
-                        : item,
-                    )
-                    .sort((a, b) => a.order! - b.order!),
-                }
-              }
-              if (appItem.title === overCate?.title) {
-                return {
-                  ...appItem,
-                  children: appItem.children
-                    .map(item =>
-                      item.id?.toString() === overID
-                        ? { ...activeItem, id: overID, order: overItem?.order, categoryID: overItem?.categoryID }
-                        : item,
-                    )
-                    .sort((a, b) => a.order! - b.order!),
-                }
-              }
-
-              return appItem
-            }) as CateItem[])
-      // setAppItems(newAppItems.sort())
+      swapNavigation(
+        { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
+        { overID: Number(overID), overCategoryID: Number(overCategoryID) },
+      )
     }
     setIsDragging(false)
   }
