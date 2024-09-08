@@ -4,6 +4,9 @@ import { AppsContext } from '../../hooks/index'
 import { useBearStore } from '../../store'
 import './index.less'
 
+const defaultIcon =
+  'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOUAAADlBAMAAABe5y0lAAAAFVBMVEUAAAAA//8An58AYGAAv78AQEAAgIDKhkyoAAAA9klEQVR42u3aPQoCMRgE0EW8gIi9KFr7h7Xg2luotej972A9TUhhE/KmHfK9bQd2mEWGyD66RZb5cBndpHR1YDKZTCaTyWQymcwqs/7QtP7z5qWrFyaTyWQymUwmk8msMo+RVeQb3SHLfPiJblu6uutmCzKZTCaTyWQymcz2zGdkjGyie2WZD0/RXUtXl93sTyaTyWQymUwmk9me2csWZDKZTCaTyWQyme2Z9T+zret/kTuXru662YJMJpPJZDKZTCazPbO8kSJ/2kj3bvYnk8lkMplMJpPJbM/sZQsymUwmk8lkMpnM1s0x8s7hk2U+fER3K179ARaSFhaQ/TozAAAAAElFTkSuQmCC'
+
 function onClickApp(appItem: AppItem) {
   try {
     gtag('event', 'click', {
@@ -71,7 +74,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
         rel="noreferrer"
       >
         <div className="img-box">
-          <img src={icon} className={`${imgClass}`} alt={name} />
+          <img src={!!icon || icon.length > 0 ? icon : defaultIcon} className={`${imgClass}`} alt={name} />
         </div>
         <p className="title" data-size={size}>
           {name}
@@ -86,7 +89,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
       </a>
       <div className="app-back">
         <div className="app-setting-head">
-          <img src={icon} className={imgClass} alt={name} />
+          <img src={!!icon || icon.length > 0 ? icon : defaultIcon} className={imgClass} alt={name} />
           <p className="title" data-size={size} title={name}>
             {name}
           </p>
