@@ -7,11 +7,11 @@ const getLibraryMap = (categories: CateItem[], navigations: AppItem[]) => {
     for (const category of categories) {
       cateItems.push({
         ...category,
-        children: navigations.filter(e => e.categoryID === category.id),
+        children: navigations.filter(e => e.categoryID === category.id).sort((a, b) => a.order! - b.order!),
       })
     }
   }
-  return { list: navigations, category: cateItems } satisfies LibraryMap
+  return { list: navigations.sort((a, b) => a.order! - b.order!), category: cateItems } satisfies LibraryMap
 }
 
 export const createSharedSlice: StateCreator<BearState, [], [], SharedSlice> = (set, get, state) => ({

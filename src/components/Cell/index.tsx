@@ -34,14 +34,14 @@ function onCornerClick(e: React.SyntheticEvent, appItem: AppItem) {
 
 const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boolean }) => {
   const toggleFavorite = useBearStore(state => state.toggleNavigationFavorite)
+  const moveLeft = useBearStore(state => state.moveLeft)
+  const moveRight = useBearStore(state => state.moveRight)
   const { name, icon, homepage, repository, darkInvert, lessRadius, title } = appItem
   const {
     favoriteAppNames,
     hiddenAppNames,
     filterKey,
-    moveLeft,
-    moveRight,
-    toggleFavorite: _toggleFavorite /* toggleVisible */,
+    /* toggleVisible */
   } = useContext(AppsContext)
   const imgClass = [darkInvert ? 'dark-invert' : '', lessRadius ? 'less-radius' : ''].join(' ')
   const size =
@@ -101,7 +101,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
           {appItem.favorite && !filterKey && (
             <div
               className={`icon icon-left ${appItem.first ? 'disabled' : ''}`}
-              onClick={() => moveLeft(appItem)}
+              onClick={() => moveLeft(appItem.id!)}
             ></div>
           )}
           <div
@@ -111,7 +111,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
           {appItem.favorite && !filterKey && (
             <div
               className={`icon icon-right ${appItem.final ? 'disabled' : ''}`}
-              onClick={() => moveRight(appItem)}
+              onClick={() => moveRight(appItem.id!)}
             ></div>
           )}
           {/* <div className="icon icon-edit" onClick={() => onEditApp(appItem)}></div> */}

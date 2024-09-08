@@ -5,7 +5,7 @@ import { type BearState, type NavigationSlice } from './bear-state'
 const navigations = await db.navigations.toArray()
 
 export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSlice> = (set, get) => ({
-  navigations: navigations.sort((a, b) => a.order! - b.order!),
+  navigations,
   swapNavigation: async (active, over) => {
     const { activeID, activeCategoryID } = active
     const { overID, overCategoryID } = over
@@ -34,7 +34,6 @@ export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSl
         ? get()
             .navigations.map(item => (item.id === activeID ? { ...item, order: overItem?.order } : item))
             .map(item => (item.id === overID ? { ...item, order: activeItem?.order } : item))
-            .sort((a, b) => a.order! - b.order!)
         : get()
             .navigations.map(item =>
               item.id === activeID
@@ -46,7 +45,6 @@ export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSl
                 ? { ...activeItem, id: overItem.id, order: overItem?.order, categoryID: overItem.categoryID }
                 : item,
             )
-            .sort((a, b) => a.order! - b.order!)
     try {
       if (activeCategoryID === overCategoryID) {
         await db.transaction('rw', db.navigations, async () => {

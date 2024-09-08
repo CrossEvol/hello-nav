@@ -20,6 +20,8 @@ export interface NavigationSlice {
 export interface FavoriteSlice {
   toggleNavigationFavorite: (id: number) => void
   getFavoritesCategory: () => Omit<CateItem, 'title'> & { title: 'favorites' }
+  moveLeft: (id: number) => void
+  moveRight: (id: number) => void
 }
 
 export interface SharedSlice {
