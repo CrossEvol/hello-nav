@@ -4,7 +4,7 @@ import nav from './libraries.json'
 export const setupNavAppDatabase = async () => {
   const count = await db.config.count()
   if (count === 0) {
-    await db.config.add({ categoryOrderID: 0, navigationOrderID: 0 })
+    await db.config.add({ categoryOrderID: 0, navigationOrderID: 0, favoriteOrderID: 0 })
     const res = (await db.config.where({ id: 1 }).toArray())[0]
     let navOrderID = 1
     let cateOrderID = 1
@@ -12,7 +12,7 @@ export const setupNavAppDatabase = async () => {
       const id = await db.categories.add({ title, order: cateOrderID++, icon: '' })
       if (id) {
         await db.navigations.bulkAdd(
-          items.map(item => ({ ...item, categoryID: id, order: navOrderID++ }) as Navigation),
+          items.map(item => ({ ...item, categoryID: id, order: navOrderID++, favoriteOrder: 0 }) as Navigation),
         )
       }
     }
