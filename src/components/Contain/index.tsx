@@ -39,7 +39,6 @@ const Contain = (
       >
         {type === 'category' && canDrag
           ? list
-              .sort((a, b) => a.order! - b.order!)
               .filter(cell => !!cell.id)
               .map(cell => (
                 <SortableItem
@@ -55,7 +54,6 @@ const Contain = (
                 </SortableItem>
               ))
           : list
-              .sort((a, b) => a.order! - b.order!)
               .filter(cell => !!cell.id)
               .map(cell => (
                 <Cell
@@ -112,13 +110,15 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
 
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event
+    const [activeCategoryID, activeID] = (active.id as string).split('-')
+    const [overCategoryID, overID] = (over!.id as string).split('-')
+
+    if (activeCategoryID === '0') return
 
     // console.log(active)
     // console.log(over)
 
     if (active.id !== over!.id) {
-      const [activeCategoryID, activeID] = (active.id as string).split('-')
-      const [overCategoryID, overID] = (over!.id as string).split('-')
       swapNavigation(
         { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
         { overID: Number(overID), overCategoryID: Number(overCategoryID) },
@@ -130,6 +130,8 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event
     const [activeCateID, activeID] = active.id.toString().split('-')
+    console.log(active)
+    if (activeCateID === '0') return
     setIsDragging(true)
     const newDraggingItem = (appItems as CateItem[])
       .find(cateItem => cateItem.id?.toString() === activeCateID)

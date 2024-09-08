@@ -3,7 +3,6 @@ import gitHubIcon from '../../assets/images/github.png'
 import { AppsContext } from '../../hooks/index'
 import { useBearStore } from '../../store'
 import './index.less'
-import { db } from '../../db'
 
 function onClickApp(appItem: AppItem) {
   try {
@@ -107,18 +106,7 @@ const Cell = (appItem: AppItem & { title: string | undefined; isSettingMode: boo
           )}
           <div
             className={`icon ${appItem.favorite ? 'icon-favorite-active' : 'icon-favorite'}`}
-            onClick={async () => {
-              const updateRows = await db.navigations.update(appItem.id, { favorite: !appItem.favorite })
-              if (updateRows) {
-                const targetItem = await db.navigations.get(appItem.id)!
-                if (!targetItem) {
-                  console.error(`can not find navigation itemID#${appItem.id}`)
-                  return
-                }
-                toggleFavorite(targetItem)
-              }
-              // _toggleFavorite(appItem)
-            }}
+            onClick={async () => toggleFavorite(appItem.id!)}
           ></div>
           {appItem.favorite && !filterKey && (
             <div

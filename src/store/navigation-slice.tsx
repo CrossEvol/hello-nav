@@ -6,8 +6,6 @@ const navigations = await db.navigations.toArray()
 
 export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSlice> = (set, get) => ({
   navigations: navigations.sort((a, b) => a.order! - b.order!),
-  toggleNavigationFavorite: (item: AppItem) =>
-    set({ navigations: get().navigations.map(e => (e.id === item.id ? { ...e, favorite: !e.favorite } : e)) }),
   swapNavigation: async (active, over) => {
     const { activeID, activeCategoryID } = active
     const { overID, overCategoryID } = over

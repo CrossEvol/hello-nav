@@ -14,6 +14,7 @@ declare interface AppItem {
   first?: boolean
   final?: boolean
   order?: number
+  favoriteOrder?: number
 }
 
 declare interface CateItem {

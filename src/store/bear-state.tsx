@@ -14,11 +14,11 @@ type Over = {
 
 export interface NavigationSlice {
   navigations: AppItem[]
-  toggleNavigationFavorite: (item: AppItem) => void
   swapNavigation: (active: Active, over: Over) => void
 }
 
 export interface FavoriteSlice {
+  toggleNavigationFavorite: (id: number) => void
   getFavoritesCategory: () => Omit<CateItem, 'title'> & { title: 'favorites' }
 }
 
