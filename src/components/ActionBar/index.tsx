@@ -46,12 +46,12 @@ function ActionBar({
             <IoCreateOutline />
           </span>
           <span
-            data-tooltip-id="my-tooltip-admin"
+            data-tooltip-id="my-tooltip-canDrag"
             className="filter-bar__toggle-btn text-xl"
-            onClick={() => setOpenDrawer(true)}
+            onClick={() => setCanDrag(!canDrag)}
             onKeyDown={() => {}}
           >
-            <SiNginxproxymanager />
+            {canDrag ? <RiDragDropLine /> : <RiDragDropFill />}
           </span>
           <PopoverWrapper
             triggerElement={
@@ -62,12 +62,12 @@ function ActionBar({
             content={
               <div className="m-1 flex flex-row justify-center space-x-2 text-slate-700">
                 <span
-                  data-tooltip-id="my-tooltip-canDrag"
+                  data-tooltip-id="my-tooltip-admin"
                   className="filter-bar__toggle-btn text-xl"
-                  onClick={() => setCanDrag(!canDrag)}
+                  onClick={() => setOpenDrawer(true)}
                   onKeyDown={() => {}}
                 >
-                  {canDrag ? <RiDragDropLine /> : <RiDragDropFill />}
+                  <SiNginxproxymanager />
                 </span>
                 <span
                   data-tooltip-id="my-tooltip-export"

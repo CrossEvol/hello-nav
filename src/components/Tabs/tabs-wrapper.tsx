@@ -17,7 +17,7 @@ const TabsWrapper = ({
 
   return (
     <div className="mx-auto max-w-md">
-      <Tabs selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
+      <Tabs defaultFocus={true} selectedIndex={tabIndex} onSelect={index => setTabIndex(index)}>
         <TabList className="flex border-b border-gray-300">
           <Tab className="cursor-pointer border-b-2 border-transparent px-4 py-2 text-gray-600 transition duration-150 ease-in-out hover:text-blue-600 focus:border-blue-600 focus:text-blue-600 focus:outline-none">
             {primaryTitle}
