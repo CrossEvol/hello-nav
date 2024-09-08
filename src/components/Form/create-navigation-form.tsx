@@ -1,12 +1,9 @@
-import chroma from 'chroma-js'
-import React, { useCallback } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+import { useBearStore } from '../../store'
 import ImageInput from '../Input/image-input'
 import TagsInput from '../Input/tags-input'
-import { type ColourOption } from '../Select/select-data'
 import SingleSelect from '../Select/single-select'
 import RCSwitchButton from '../Switch/swtich-button'
-import { db } from '../../db'
 
 export type Navigation = {
   id: number
@@ -23,22 +20,24 @@ export type Navigation = {
   first?: boolean
   final?: boolean
   categoryID?: number
+  favoriteOrder: number
 }
 
-const CreateNavigationForm: React.FC = () => {
+const CreateNavigationForm = ({ onSubmitCallback }: { onSubmitCallback?: () => void }) => {
+  const navigationOrderID = useBearStore(state => state.navigationOrderID)
+  const categoryOptions = useBearStore(state => state.getCategoryOptions())
+  const addNavigation = useBearStore(state => state.addNavigation)
   const {
     register,
     handleSubmit,
     control,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm<Navigation>({
     defaultValues: {
       name: '',
       homepage: '',
       repository: '',
-      order: 0,
+      order: navigationOrderID,
       icon: '',
       keywords: [],
       darkInvert: true,
@@ -47,40 +46,17 @@ const CreateNavigationForm: React.FC = () => {
       hidden: false,
       first: false,
       final: false,
+      favoriteOrder: 0,
     },
   })
-  const [categoryOptions, setCategoryOptions] = React.useState<ColourOption[]>([])
 
   const onSubmit: SubmitHandler<Navigation> = async data => {
     console.log(data)
-    const res = await db.navigations.add({ ...data })
-    if (res) {
-      await db.config.update(1, { navigationOrderID: getValues('order') })
+    addNavigation(data)
+    if (onSubmitCallback) {
+      onSubmitCallback()
     }
   }
-
-  const initOrder = useCallback(async () => {
-    const newOrder = (await db.config.where({ id: 1 }).toArray())[0].navigationOrderID! + 1
-    setValue('order', newOrder)
-  }, [setValue])
-
-  const initCategoryOptions = useCallback(async () => {
-    const categories = await db.categories.toArray()
-    const options = categories.map(item => ({
-      value: item.id!.toString(),
-      label: item.title,
-      color: chroma.random().hex(),
-    })) satisfies ColourOption[]
-    console.log(options)
-    setCategoryOptions(options)
-  }, [])
-
-  React.useEffect(() => {
-    initOrder()
-    initCategoryOptions()
-
-    return () => {}
-  }, [initOrder, initCategoryOptions])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-lg space-y-4 p-4">

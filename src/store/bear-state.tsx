@@ -1,5 +1,10 @@
+import { type ColourOption } from '../components/Select/select-data'
+import { type Category, type Navigation } from '../db/db'
+
 export interface CategorySlice {
   categories: CateItem[]
+  getCategoryOptions: () => ColourOption[]
+  addCategory: (category: Omit<Category, 'id'>) => void
 }
 
 type Active = {
@@ -15,6 +20,7 @@ type Over = {
 export interface NavigationSlice {
   navigations: AppItem[]
   swapNavigation: (active: Active, over: Over) => void
+  addNavigation: (category: Omit<Navigation, 'id'>) => void
 }
 
 export interface FavoriteSlice {
@@ -31,6 +37,10 @@ export interface SharedSlice {
 export interface ConfigSlice {
   initialized: boolean
   initializeDatabase: () => void
+  categoryOrderID: number
+  increaseCategoryOrder: () => void
+  increaseNavigationOrder: () => void
+  navigationOrderID: number
 }
 
 export type BearState = SharedSlice & CategorySlice & NavigationSlice & FavoriteSlice & ConfigSlice

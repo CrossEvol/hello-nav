@@ -6,6 +6,24 @@ const navigations = await db.navigations.toArray()
 
 export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSlice> = (set, get) => ({
   navigations,
+  addNavigation: async navigation => {
+    return await db.transaction('rw', db.navigations, db.config, db.categories, async () => {
+      const category = await db.categories.get(navigation.categoryID)
+      const insertedID = await db.navigations.add({
+        ...navigation,
+        keywords: navigation.keywords?.includes(category!.title)
+          ? navigation.keywords
+          : [...navigation.keywords!, category!.title],
+      })
+      if (!insertedID) {
+        console.error('failed to insert navigation')
+        return
+      }
+      get().increaseNavigationOrder()
+      const newNavigation = (await db.navigations.get(insertedID))!
+      return set({ navigations: [...get().navigations, newNavigation] })
+    })
+  },
   swapNavigation: async (active, over) => {
     const { activeID, activeCategoryID } = active
     const { overID, overCategoryID } = over

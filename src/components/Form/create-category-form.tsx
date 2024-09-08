@@ -1,9 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
+import { useBearStore } from '../../store'
 import ImageInput from '../Input/image-input'
-import { db } from '../../db'
 
 export type Category = {
   title: string
@@ -18,41 +18,36 @@ const categorySchema = z.object({
   icon: z.string(),
 })
 
-const CreateCategoryForm = ({ closeAction }: { closeAction: React.ReactNode }) => {
+const CreateCategoryForm = ({
+  closeAction,
+  onSubmitCallback,
+}: {
+  closeAction: React.ReactNode
+  onSubmitCallback?: () => void
+}) => {
+  const categoryID = useBearStore(state => state.categoryOrderID)
+  const addCategory = useBearStore(state => state.addCategory)
   const {
     register,
     handleSubmit,
     control,
-    setValue,
-    getValues,
     formState: { errors },
   } = useForm<Category>({
     resolver: zodResolver(categorySchema),
     defaultValues: {
       title: '',
-      order: 0,
+      order: categoryID,
       icon: '',
     },
   })
 
   const onSubmit: SubmitHandler<Category> = async data => {
     console.log(data)
-    const res = await db.categories.add({ ...data })
-    if (res) {
-      await db.config.update(1, { categoryOrderID: getValues('order') })
+    addCategory(data)
+    if (onSubmitCallback) {
+      onSubmitCallback()
     }
   }
-
-  const initOrder = useCallback(async () => {
-    const newOrder = (await db.config.where({ id: 1 }).toArray())[0].categoryOrderID
-    setValue('order', newOrder!)
-  }, [setValue])
-
-  React.useEffect(() => {
-    initOrder()
-
-    return () => {}
-  }, [initOrder])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="mx-auto max-w-lg p-4">

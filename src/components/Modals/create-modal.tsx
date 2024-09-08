@@ -60,8 +60,8 @@ const CreateModal = ({ open, setOpen }: PropsWithOpen) => {
           <TabsWrapper
             primaryTitle="navigation"
             secondaryTitle="category"
-            primaryNode={<CreateNavigationForm />}
-            secondaryNode={<CreateCategoryForm closeAction={CloseButton} />}
+            primaryNode={<CreateNavigationForm onSubmitCallback={() => setOpen(false)} />}
+            secondaryNode={<CreateCategoryForm closeAction={CloseButton} onSubmitCallback={() => setOpen(false)} />}
           />
         </div>
       </Modal>
