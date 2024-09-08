@@ -113,8 +113,6 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
     const [activeCategoryID, activeID] = (active.id as string).split('-')
     const [overCategoryID, overID] = (over!.id as string).split('-')
 
-    if (activeCategoryID === '0') return
-
     // console.log(active)
     // console.log(over)
 
@@ -123,15 +121,13 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
         { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
         { overID: Number(overID), overCategoryID: Number(overCategoryID) },
       )
+      setIsDragging(false)
     }
-    setIsDragging(false)
   }
 
   function handleDragStart(event: DragStartEvent) {
     const { active } = event
     const [activeCateID, activeID] = active.id.toString().split('-')
-    console.log(active)
-    if (activeCateID === '0') return
     setIsDragging(true)
     const newDraggingItem = (appItems as CateItem[])
       .find(cateItem => cateItem.id?.toString() === activeCateID)

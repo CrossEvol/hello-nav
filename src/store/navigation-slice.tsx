@@ -11,6 +11,24 @@ export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSl
     const { overID, overCategoryID } = over
     const activeItem = get().navigations.find(item => item.id === activeID)!
     const overItem = get().navigations.find(item => item.id === overID)!
+
+    // when drag inside favorite, target inside favorite then swap , other nothing happened
+    if (activeCategoryID === 0) {
+      if (overCategoryID === 0) {
+        await db.transaction('rw', db.navigations, async () => {
+          await db.navigations.update(activeID, { favoriteOrder: overItem.favoriteOrder })
+          await db.navigations.update(overID, { favoriteOrder: activeItem.favoriteOrder })
+        })
+        return set({
+          navigations: get()
+            .navigations.map(item => (item.id === activeID ? { ...item, favoriteOrder: overItem.favoriteOrder } : item))
+            .map(item => (item.id === overID ? { ...item, favoriteOrder: activeItem.favoriteOrder } : item)),
+        })
+      } else {
+        return set({ navigations: get().navigations })
+      }
+    }
+
     const navigations =
       activeCategoryID === overCategoryID
         ? get()
