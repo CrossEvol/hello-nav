@@ -1,6 +1,6 @@
 import { type StateCreator } from 'zustand'
-import { db } from '../db'
 import { type BearState, type CategorySlice } from './bear-state'
+import { db } from '../db'
 
 const categories = await db.categories.toArray()
 

@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import gitHubIcon from '../../assets/images/github.png'
-import { db } from '../../db'
 import { AppsContext } from '../../hooks/index'
 import { useBearStore } from '../../store'
 import './index.less'
+import { db } from '../../db'
 
 function onClickApp(appItem: AppItem) {
   try {

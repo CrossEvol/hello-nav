@@ -1,12 +1,12 @@
 import chroma from 'chroma-js'
 import React, { useCallback } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
-import { db } from '../../db'
 import ImageInput from '../Input/image-input'
 import TagsInput from '../Input/tags-input'
 import { type ColourOption } from '../Select/select-data'
 import SingleSelect from '../Select/single-select'
 import RCSwitchButton from '../Switch/swtich-button'
+import { db } from '../../db'
 
 export type Navigation = {
   id: number

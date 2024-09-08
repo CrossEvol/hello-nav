@@ -1,5 +1,4 @@
 import { type PropsWithChildren, createContext, useCallback, useEffect, useState } from 'react'
-import { useLibraryFromDexie } from './use-library-map-from-dexie'
 import { useLibraryMapFromFile } from './use-library-map-from-file'
 
 const AppsContext = createContext({
@@ -180,4 +179,4 @@ const AppsProvider = ({ children }: PropsWithChildren) => {
   return <AppsContext.Provider value={value}>{children}</AppsContext.Provider>
 }
 
-export { AppsContext, AppsProvider, useLibraryFromDexie, useLibraryMapFromFile }
+export { AppsContext, AppsProvider, useLibraryMapFromFile }

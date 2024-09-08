@@ -2,8 +2,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useCallback } from 'react'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { db } from '../../db'
 import ImageInput from '../Input/image-input'
+import { db } from '../../db'
 
 export type Category = {
   title: string

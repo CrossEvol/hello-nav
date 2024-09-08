@@ -1,5 +1,5 @@
 import { type StateCreator } from 'zustand'
-import { db } from '../db'
+import { db } from '../db/db'
 import { type BearState, type NavigationSlice } from './bear-state'
 
 const navigations = await db.navigations.toArray()
