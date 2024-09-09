@@ -14,10 +14,13 @@ import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
 import { CanDragAtom } from '../../providers/jotai-provider'
+import CategoryAgGrid from '../AgGrid/category-ag-grid'
+import NavigationAgGrid from '../AgGrid/navigation-ag-grid'
 import DrawerApp from '../Drawer/drawer-app'
 import CreateModal from '../Modals/create-modal'
 import PandaBtn from '../PandaBtn'
 import PopoverWrapper from '../Popover/popover-wrapper'
+import AdminTabsWrapper from '../Tabs/admin-tabs-wrapper'
 import './index.less'
 
 function ActionBar({
@@ -136,7 +139,68 @@ function ActionBar({
         <ReactTooltip id="my-tooltip-2" place="bottom" variant="light" content="group" />
         <ReactTooltip id="my-tooltip-3" place="bottom" variant="light" content="setting" />
       </div>
-      <DrawerApp open={openDrawer} setOpen={setOpenDrawer} />
+      <DrawerApp
+        open={openDrawer}
+        setOpen={setOpenDrawer}
+        header={<div className="h-8"></div>}
+        footer={
+          <div className="mx-auto flex max-w-md justify-end gap-6">
+            <a
+              className="gap-0.25 flex items-center text-xs text-zinc-600"
+              href="https://github.com/emilkowalski/vaul"
+              target="_self"
+            >
+              GitHub
+              <svg
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="16"
+                aria-hidden="true"
+                className="ml-1 size-3 stroke-2"
+              >
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                <path d="M15 3h6v6"></path>
+                <path d="M10 14L21 3"></path>
+              </svg>
+            </a>
+            <a
+              className="gap-0.25 flex items-center text-xs text-zinc-600"
+              href="https://twitter.com/emilkowalski_"
+              target="_self"
+            >
+              Twitter
+              <svg
+                fill="none"
+                height="16"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                width="16"
+                aria-hidden="true"
+                className="ml-1 size-3"
+              >
+                <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                <path d="M15 3h6v6"></path>
+                <path d="M10 14L21 3"></path>
+              </svg>
+            </a>
+          </div>
+        }
+      >
+        <AdminTabsWrapper
+          primaryNode={<NavigationAgGrid />}
+          primaryTitle="navigations"
+          secondaryNode={<CategoryAgGrid />}
+          secondaryTitle="category"
+        />
+      </DrawerApp>
       <CreateModal open={openCreateModal} setOpen={setOpenCreateModal} />
     </>
   )

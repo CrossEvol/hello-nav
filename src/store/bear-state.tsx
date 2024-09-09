@@ -1,8 +1,11 @@
 import { type ColourOption } from '../components/Select/select-data'
 import { type Category, type Navigation } from '../db/db'
 
+export type CategoryWithCount = Omit<CateItem, 'children'> & { count: number }
+
 export interface CategorySlice {
   categories: CateItem[]
+  getCategoriesWithCount: () => CategoryWithCount[]
   getCategoryOptions: () => ColourOption[]
   addCategory: (category: Omit<Category, 'id'>) => void
 }

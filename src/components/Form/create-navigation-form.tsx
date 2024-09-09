@@ -183,22 +183,6 @@ const CreateNavigationForm = ({ onSubmitCallback }: { onSubmitCallback?: () => v
           />
           <span className="ml-2 text-sm text-gray-700">Hidden</span>
         </label>
-        <label htmlFor="first" className="inline-flex items-center">
-          <Controller
-            name="first"
-            control={control}
-            render={({ field }) => <RCSwitchButton checked={field.value} setChecked={field.onChange} />}
-          />
-          <span className="ml-2 text-sm text-gray-700">First</span>
-        </label>
-        <label htmlFor="final" className="inline-flex items-center">
-          <Controller
-            name="final"
-            control={control}
-            render={({ field }) => <RCSwitchButton checked={field.value} setChecked={field.onChange} />}
-          />
-          <span className="ml-2 text-sm text-gray-700">Final</span>
-        </label>
       </div>
 
       <div className="flex space-x-4">

@@ -28,4 +28,9 @@ export const createCategorySlice: StateCreator<BearState, [], [], CategorySlice>
       return set({ categories: [...get().categories, { ...newCategory, children: [] }] })
     })
   },
+  getCategoriesWithCount: () =>
+    get().categories.map(c => ({
+      ...c,
+      count: get().navigations.filter(e => e.categoryID === c.id).length,
+    })),
 })
