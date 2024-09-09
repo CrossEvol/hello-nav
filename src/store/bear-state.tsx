@@ -20,8 +20,24 @@ type Over = {
   overCategoryID: number
 }
 
+export type GridAppItem = {
+  id?: number
+  name: string
+  homepage: string
+  repository?: string
+  icon: string
+  category?: string
+  categoryID?: number
+  keywords?: string[]
+  darkInvert: boolean
+  lessRadius: boolean
+  hidden: boolean
+  order?: number
+}
+
 export interface NavigationSlice {
   navigations: AppItem[]
+  getNavigationsForGrid: () => GridAppItem[]
   swapNavigation: (active: Active, over: Over) => void
   addNavigation: (category: Omit<Navigation, 'id'>) => void
 }

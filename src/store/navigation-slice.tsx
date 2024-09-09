@@ -6,6 +6,13 @@ const navigations = await db.navigations.toArray()
 
 export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSlice> = (set, get) => ({
   navigations,
+  getNavigationsForGrid: () =>
+    get().navigations.map(e => ({
+      ...e,
+      lessRadius: e.lessRadius ? e.lessRadius : false,
+      darkInvert: e.darkInvert ? e.darkInvert : false,
+      hidden: e.hidden ? e.hidden : false,
+    })),
   addNavigation: async navigation => {
     return await db.transaction('rw', db.navigations, db.config, db.categories, async () => {
       const category = await db.categories.get(navigation.categoryID)

@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react'
 import { FaRegCircleCheck } from 'react-icons/fa6'
 import { MdRadioButtonUnchecked } from 'react-icons/md'
 import { useBearStore } from '../../store'
+import { type GridAppItem } from '../../store/bear-state'
 import GridUploadZone from './grid-upload-zone'
 
 ModuleRegistry.registerModules([ClientSideRowModelModule])
@@ -33,27 +34,36 @@ const NavigationIconRenderer = (params: CustomCellRendererProps<AppItem, string>
   </span>
 )
 
-const CustomCheckBox = (params: CustomCellRendererProps<AppItem, boolean | undefined>) => (
-  <Checkbox.Root className="CheckboxRoot" defaultChecked id="c1">
+const CustomCheckBox = (params: CustomCellRendererProps<AppItem, boolean>) => (
+  <Checkbox.Root className="CheckboxRoot" checked={true} onCheckedChange={e => params.setValue!(!params.value)} id="c1">
     <Checkbox.Indicator className="CheckboxIndicator">
-      {params.value ? <FaRegCircleCheck fontSize={20} /> : <MdRadioButtonUnchecked fontSize={20} />}
+      {params.value! ? (
+        <FaRegCircleCheck className="text-blue-600" fontSize={20} />
+      ) : (
+        <MdRadioButtonUnchecked className="text-gray-400" fontSize={20} />
+      )}
     </Checkbox.Indicator>
   </Checkbox.Root>
 )
 
 const NavigationAgGrid = () => {
-  const navigations = useBearStore(state => state.navigations)
+  const navigations = useBearStore(state => state.getNavigationsForGrid())
 
-  const [columnDefs, _setColumnDefs] = useState<ColDef<AppItem>[]>([
+  const [columnDefs, _setColumnDefs] = useState<ColDef<GridAppItem>[]>([
     { field: 'id', width: 80 },
     { field: 'name', width: 120 },
     { field: 'homepage', width: 240 },
     { field: 'repository', width: 260 },
     { field: 'icon', width: 400, cellRenderer: NavigationIconRenderer },
     { field: 'keywords' },
-    { field: 'darkInvert', width: 120, cellRenderer: CustomCheckBox },
-    { field: 'lessRadius', width: 120, cellRenderer: CustomCheckBox },
-    { field: 'hidden', width: 100, editable: true, cellRenderer: CustomCheckBox },
+    {
+      field: 'darkInvert',
+      width: 120,
+      editable: false,
+      cellRenderer: CustomCheckBox,
+    },
+    { field: 'lessRadius', width: 120, editable: false, cellRenderer: CustomCheckBox },
+    { field: 'hidden', width: 100, editable: false, cellRenderer: CustomCheckBox },
     { field: 'order', width: 80 },
     { field: 'categoryID', width: 150 },
   ])
