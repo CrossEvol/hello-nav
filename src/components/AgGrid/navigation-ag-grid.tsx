@@ -7,6 +7,7 @@ import * as Checkbox from '@radix-ui/react-checkbox'
 import { useMemo, useState } from 'react'
 import { FaRegCircleCheck } from 'react-icons/fa6'
 import { MdRadioButtonUnchecked } from 'react-icons/md'
+import { defaultIcon } from '../../assets/icons'
 import { useBearStore } from '../../store'
 import { type GridAppItem } from '../../store/bear-state'
 import GridUploadZone from './grid-upload-zone'
@@ -14,25 +15,29 @@ import GridUploadZone from './grid-upload-zone'
 ModuleRegistry.registerModules([ClientSideRowModelModule])
 
 // Custom Cell Renderer (Display logos based on cell value)
-const NavigationIconRenderer = (params: CustomCellRendererProps<AppItem, string>) => (
-  <span style={{ display: 'flex', height: '100%', width: '100%', alignItems: 'center' }}>
-    {params.value && (
-      <img
-        alt={`${params.value} Flag`}
-        src={`${params.value}`}
-        style={{
-          display: 'block',
-          width: '25px',
-          height: 'auto',
-          maxHeight: '50%',
-          marginRight: '12px',
-          filter: 'brightness(1.1)',
-        }}
-      />
-    )}
-    <GridUploadZone imageData="" setImageData={() => {}} />
-  </span>
-)
+const NavigationIconRenderer = (params: CustomCellRendererProps<AppItem, string>) => {
+  return (
+    <span style={{ display: 'flex', height: '100%', width: '100%', alignItems: 'center' }}>
+      {params.value ? (
+        <img
+          alt={`${params.value} Flag`}
+          src={`${params.value}`}
+          style={{
+            display: 'block',
+            width: '24px',
+            height: 'auto',
+            maxHeight: '50%',
+            marginRight: '12px',
+            filter: 'brightness(1.1)',
+          }}
+        />
+      ) : (
+        <img src={defaultIcon} className="mr-3 size-6" />
+      )}
+      <GridUploadZone imageSrc={params.value!} setImageSrc={(icon: string) => params.setValue!(icon)} />
+    </span>
+  )
+}
 
 const CustomCheckBox = (params: CustomCellRendererProps<AppItem, boolean>) => (
   <Checkbox.Root className="CheckboxRoot" checked={true} onCheckedChange={e => params.setValue!(!params.value)} id="c1">

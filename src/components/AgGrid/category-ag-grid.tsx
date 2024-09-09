@@ -4,6 +4,7 @@ import { AgGridReact, type CustomCellRendererProps } from '@ag-grid-community/re
 import '@ag-grid-community/styles/ag-grid.css'
 import '@ag-grid-community/styles/ag-theme-quartz.css'
 import { useMemo, useState } from 'react'
+import { defaultIcon } from '../../assets/icons'
 import { useBearStore } from '../../store'
 import { type CategoryWithCount } from '../../store/bear-state'
 import GridUploadZone from './grid-upload-zone'
@@ -13,21 +14,23 @@ ModuleRegistry.registerModules([ClientSideRowModelModule])
 // Custom Cell Renderer (Display logos based on cell value)
 const CategoryIconRenderer = (params: CustomCellRendererProps<CategoryWithCount, string>) => (
   <span style={{ display: 'flex', height: '100%', width: '100%', alignItems: 'center' }}>
-    {params.value && (
+    {params.value ? (
       <img
         alt={`${params.value} Flag`}
         src={`${params.value}`}
         style={{
           display: 'block',
-          width: '25px',
+          width: '24px',
           height: 'auto',
           maxHeight: '50%',
           marginRight: '12px',
           filter: 'brightness(1.1)',
         }}
       />
+    ) : (
+      <img src={defaultIcon} className="mr-3 size-6" />
     )}
-    <GridUploadZone imageData="" setImageData={() => {}} />
+    <GridUploadZone imageSrc={params.value!} setImageSrc={(icon: string) => params.setValue!(icon)} />
   </span>
 )
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { MdDriveFolderUpload } from 'react-icons/md'
+import { MdClear, MdDriveFolderUpload } from 'react-icons/md'
 
 export type UploadFileResponse = {
   filename: string
@@ -10,18 +10,18 @@ export type UploadFileResponse = {
 type UploadResponseCallback = (resp?: Partial<UploadFileResponse>) => void
 
 const GridUploadZone = ({
-  imageData,
-  setImageData,
+  setImageSrc,
   onSuccess,
   onFailure,
 }: {
-  imageData: string
-  setImageData: (value: string) => void
+  imageSrc: string
+  setImageSrc: (value: string) => void
   onSuccess?: UploadResponseCallback
   onFailure?: (error: unknown) => void
 }) => {
-  const [imgSrc, setImgSrc] = useState('')
-  const [file, setFile] = useState<(File & { preview: string }) | null>(null)
+  const [_error, setError] = useState<string | null>(null)
+  const [urlText, setUrlText] = React.useState('')
+  const [file, setFile] = React.useState<(File & { preview: string }) | null>(null)
 
   const { getRootProps, getInputProps } = useDropzone({
     accept: {
@@ -56,18 +56,84 @@ const GridUploadZone = ({
 
   React.useEffect(() => {
     if (file) {
-      setImgSrc(file.preview)
-    } else {
-      setImgSrc('')
+      // Revoke the object URL to free memory
+      URL.revokeObjectURL(file.preview)
+
+      // Create a FileReader to convert the file to base64
+      const reader = new FileReader()
+
+      // When the reader is done loading the file
+      reader.onloadend = () => {
+        // The result is a base64 encoded string
+        const base64String = reader.result as string
+
+        setImageSrc(base64String)
+        setUrlText(file.preview)
+
+        // Log the base64 string to the console
+        // console.log(base64String)
+      }
+
+      // Read the file as a Data URL (which includes the base64 encoding)
+      reader.readAsDataURL(file)
     }
 
     return () => {}
-  }, [file])
+  }, [file, setImageSrc])
 
-  React.useEffect(() => {
-    setImgSrc(imageData)
-    return () => {}
-  }, [imageData])
+  const isValidImageUrl = async (url: string): Promise<boolean> => {
+    try {
+      const response = await fetch(url, { method: 'HEAD' })
+      const contentType = response.headers.get('Content-Type')
+      const contentLength = response.headers.get('Content-Length')
+
+      if (!contentType?.startsWith('image/')) {
+        return false
+      }
+
+      if (contentLength && Number(contentLength) > 500_000) {
+        console.error('Image data is larger than 500,000 bytes.')
+        return false
+      }
+
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
+    }
+  }
+
+  const handleImageDownload = async (url: string) => {
+    try {
+      const response = await fetch(url)
+      const blob = await response.blob()
+      const reader = new FileReader()
+
+      reader.onloadend = () => {
+        const base64String = reader.result as string
+        setImageSrc(base64String)
+      }
+
+      reader.readAsDataURL(blob)
+    } catch (error) {
+      console.error(error)
+      setError('Failed to download the image')
+    }
+  }
+
+  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value
+    setUrlText(value)
+
+    const validImage = await isValidImageUrl(value)
+
+    if (validImage) {
+      setError(null)
+      handleImageDownload(value)
+    } else {
+      setError('Invalid image URL')
+    }
+  }
 
   return (
     <section>
@@ -81,8 +147,8 @@ const GridUploadZone = ({
               e.preventDefault()
               e.stopPropagation()
             }}
-            // value={imageUrl}
-            // onChange={handleInputChange}
+            value={urlText}
+            onChange={handleInputChange}
             placeholder="Enter image URL"
             className="w-full rounded border border-gray-300 p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -90,57 +156,26 @@ const GridUploadZone = ({
             type="button"
             className="focus:shadow-outline rounded bg-blue-500 p-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
           >
-            <div className="flex min-w-20 flex-row items-center justify-center space-x-2">
+            <div className="flex min-w-10 flex-row items-center justify-center">
               <MdDriveFolderUpload size={'16'} />
-              <div className="font-thin">Upload</div>
+            </div>
+          </button>
+          <button
+            type="button"
+            onClick={e => {
+              e.stopPropagation()
+              setImageSrc('')
+              setUrlText('')
+              setFile(null)
+            }}
+            className="focus:shadow-outline rounded bg-red-400 p-2 font-bold text-white hover:bg-red-600 focus:outline-none"
+          >
+            <div className="flex min-w-10 flex-row items-center justify-center">
+              <MdClear size={'16'} />
             </div>
           </button>
         </div>
       </div>
-      {imgSrc.length > 0 ? (
-        <div className="relative">
-          <img
-            src={imgSrc}
-            className="block h-auto w-[36rem] border-2 border-dotted p-1"
-            onLoad={() => {
-              if (file) {
-                // Revoke the object URL to free memory
-                URL.revokeObjectURL(file.preview)
-
-                // Create a FileReader to convert the file to base64
-                const reader = new FileReader()
-
-                // When the reader is done loading the file
-                reader.onloadend = () => {
-                  // The result is a base64 encoded string
-                  const base64String = reader.result as string
-
-                  setImageData(base64String)
-
-                  // Log the base64 string to the console
-                  // console.log(base64String)
-                }
-
-                // Read the file as a Data URL (which includes the base64 encoding)
-                reader.readAsDataURL(file)
-              }
-            }}
-            alt="Uploaded preview"
-          />
-          {/* Buzz icon for clearing */}
-          <button
-            onClick={() => {
-              setFile(null)
-              setImageData('')
-            }}
-            type="button"
-            className="absolute -right-2 -top-2 size-5 rounded-2xl bg-red-500 text-white hover:bg-red-600"
-            aria-label="Clear image"
-          >
-            ✖
-          </button>
-        </div>
-      ) : null}
     </section>
   )
 }
