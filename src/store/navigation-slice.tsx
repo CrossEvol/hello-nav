@@ -9,6 +9,7 @@ export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSl
   getNavigationsForGrid: () =>
     get().navigations.map(e => ({
       ...e,
+      category: get().categoryMapper().get(e.categoryID!),
       lessRadius: e.lessRadius ? e.lessRadius : false,
       darkInvert: e.darkInvert ? e.darkInvert : false,
       hidden: e.hidden ? e.hidden : false,

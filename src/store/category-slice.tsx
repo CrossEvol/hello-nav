@@ -8,6 +8,11 @@ const categories = await db.categories.toArray()
 
 export const createCategorySlice: StateCreator<BearState, [], [], CategorySlice> = (set, get) => ({
   categories: categories.map(c => ({ ...c, children: [] })),
+  categoryMapper: () =>
+    categories.reduce((acc, cur) => {
+      acc.set(cur.id!, cur.title)
+      return acc
+    }, new Map<number, string>()),
   getCategoryOptions: () => {
     const options = get().categories.map(item => ({
       value: item.id!.toString(),

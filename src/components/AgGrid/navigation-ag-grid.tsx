@@ -1,5 +1,5 @@
 import { ClientSideRowModelModule } from '@ag-grid-community/client-side-row-model'
-import { type ColDef, ModuleRegistry } from '@ag-grid-community/core'
+import { type ColDef, ModuleRegistry, type NewValueParams } from '@ag-grid-community/core'
 import { AgGridReact, type CustomCellRendererProps } from '@ag-grid-community/react'
 import '@ag-grid-community/styles/ag-grid.css'
 import '@ag-grid-community/styles/ag-theme-quartz.css'
@@ -53,13 +53,14 @@ const CustomCheckBox = (params: CustomCellRendererProps<AppItem, boolean>) => (
 
 const NavigationAgGrid = () => {
   const navigations = useBearStore(state => state.getNavigationsForGrid())
+  const categories = useBearStore(state => state.categories)
 
   const [columnDefs, _setColumnDefs] = useState<ColDef<GridAppItem>[]>([
     { field: 'id', width: 80 },
     { field: 'name', width: 120 },
     { field: 'homepage', width: 240 },
     { field: 'repository', width: 260 },
-    { field: 'icon', width: 400, cellRenderer: NavigationIconRenderer },
+    { field: 'icon', width: 400, sortable: false, cellRenderer: NavigationIconRenderer },
     { field: 'keywords' },
     {
       field: 'darkInvert',
@@ -70,7 +71,16 @@ const NavigationAgGrid = () => {
     { field: 'lessRadius', width: 120, editable: false, cellRenderer: CustomCheckBox },
     { field: 'hidden', width: 100, editable: false, cellRenderer: CustomCheckBox },
     { field: 'order', width: 80 },
-    { field: 'categoryID', width: 150 },
+    {
+      field: 'category',
+      width: 200,
+      editable: true,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: {
+        values: categories.map(c => c.title),
+      },
+      onCellValueChanged: (p: NewValueParams<GridAppItem, string>) => console.log(p),
+    },
   ])
 
   const defaultColDef = useMemo(() => {

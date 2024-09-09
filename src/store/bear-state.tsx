@@ -5,6 +5,7 @@ export type CategoryWithCount = Omit<CateItem, 'children'> & { count: number }
 
 export interface CategorySlice {
   categories: CateItem[]
+  categoryMapper: () => Map<number, string>
   getCategoriesWithCount: () => CategoryWithCount[]
   getCategoryOptions: () => ColourOption[]
   addCategory: (category: Omit<Category, 'id'>) => void
@@ -27,7 +28,6 @@ export type GridAppItem = {
   repository?: string
   icon: string
   category?: string
-  categoryID?: number
   keywords?: string[]
   darkInvert: boolean
   lessRadius: boolean
