@@ -65,10 +65,19 @@ const NavigationAgGrid = () => {
     {
       field: 'darkInvert',
       width: 120,
-      editable: false,
-      cellRenderer: CustomCheckBox,
+      editable: true,
+      cellEditor: 'agCheckboxCellEditor',
+      onCellValueChanged: (p: NewValueParams<GridAppItem, boolean>) => console.log(p),
+      // cellRenderer: CustomCheckBox,
     },
-    { field: 'lessRadius', width: 120, editable: false, cellRenderer: CustomCheckBox },
+    {
+      field: 'lessRadius',
+      width: 120,
+      editable: true,
+      cellEditor: 'agCheckboxCellEditor',
+      onCellValueChanged: (p: NewValueParams<GridAppItem, boolean>) => console.log(p),
+      // cellRenderer: CustomCheckBox,
+    },
     { field: 'hidden', width: 100, editable: false, cellRenderer: CustomCheckBox },
     { field: 'order', width: 80 },
     {
