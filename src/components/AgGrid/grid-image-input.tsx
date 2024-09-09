@@ -137,8 +137,8 @@ const GridImageInput = ({
 
   return (
     <section>
-      <div className="flex w-56 justify-between py-2">
-        <div {...getRootProps({ className: 'dropzone' })}>
+      <div className="flex w-56 justify-between p-2">
+        <div {...getRootProps({ className: 'dropzone space-x-0.5' })}>
           <input {...getInputProps()} />
           <input
             type="text"
@@ -154,7 +154,7 @@ const GridImageInput = ({
           />
           <button
             type="button"
-            className="focus:shadow-outline rounded bg-blue-500 p-2 font-bold text-white hover:bg-blue-700 focus:outline-none"
+            className="focus:shadow-outline rounded bg-slate-50 p-2 font-bold text-slate-600 hover:bg-blue-500 hover:text-white focus:outline-none"
           >
             <div className="flex min-w-10 flex-row items-center justify-center">
               <MdDriveFolderUpload size={'16'} />
@@ -168,7 +168,7 @@ const GridImageInput = ({
               setUrlText('')
               setFile(null)
             }}
-            className="focus:shadow-outline rounded bg-red-400 p-2 font-bold text-white hover:bg-red-600 focus:outline-none"
+            className="focus:shadow-outline rounded bg-slate-50 p-2 font-bold text-slate-600 hover:bg-red-400 hover:text-white focus:outline-none"
           >
             <div className="flex min-w-10 flex-row items-center justify-center">
               <MdClear size={'16'} />
