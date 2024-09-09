@@ -9,7 +9,7 @@ export type UploadFileResponse = {
 
 type UploadResponseCallback = (resp?: Partial<UploadFileResponse>) => void
 
-const GridUploadZone = ({
+const GridImageInput = ({
   setImageSrc,
   onSuccess,
   onFailure,
@@ -180,4 +180,4 @@ const GridUploadZone = ({
   )
 }
 
-export default GridUploadZone
+export default GridImageInput

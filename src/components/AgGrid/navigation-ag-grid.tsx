@@ -10,7 +10,7 @@ import { MdRadioButtonUnchecked } from 'react-icons/md'
 import { defaultIcon } from '../../assets/icons'
 import { useBearStore } from '../../store'
 import { type GridAppItem } from '../../store/bear-state'
-import GridUploadZone from './grid-upload-zone'
+import GridImageInput from './grid-image-input'
 
 ModuleRegistry.registerModules([ClientSideRowModelModule])
 
@@ -34,7 +34,7 @@ const NavigationIconRenderer = (params: CustomCellRendererProps<AppItem, string>
       ) : (
         <img src={defaultIcon} className="mr-3 size-6" />
       )}
-      <GridUploadZone imageSrc={params.value!} setImageSrc={(icon: string) => params.setValue!(icon)} />
+      <GridImageInput imageSrc={params.value!} setImageSrc={(icon: string) => params.setValue!(icon)} />
     </span>
   )
 }
