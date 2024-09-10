@@ -13,7 +13,9 @@ import iconList from '../../assets/images/icon-list.svg'
 import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
+import { useDownload } from '../../hooks'
 import { CanDragAtom, OpenCreateModal } from '../../providers/jotai-provider'
+import { useBearStore } from '../../store'
 import CategoryAgGrid from '../AgGrid/category-ag-grid'
 import NavigationAgGrid from '../AgGrid/navigation-ag-grid'
 import DrawerApp from '../Drawer/drawer-app'
@@ -31,6 +33,8 @@ function ActionBar({
   onClear,
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
+  const exports = useBearStore(state => state.getExports())
+  const { downloadJson } = useDownload()
   const [canDrag, setCanDrag] = useAtom(CanDragAtom)
   const [, setOpen] = useAtom(OpenCreateModal)
   const [openDrawer, setOpenDrawer] = React.useState(false)
@@ -74,7 +78,7 @@ function ActionBar({
                 <span
                   data-tooltip-id="my-tooltip-export"
                   className="filter-bar__toggle-btn text-xl"
-                  onClick={() => alert('2')}
+                  onClick={() => downloadJson(exports)}
                   onKeyDown={() => {}}
                 >
                   <TbPackageExport />

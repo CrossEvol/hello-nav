@@ -1,4 +1,5 @@
 import { type PropsWithChildren, createContext, useCallback, useEffect, useState } from 'react'
+import { useDownload } from './use-download'
 import { useLibraryMapFromFile } from './use-library-map-from-file'
 
 const AppsContext = createContext({
@@ -179,4 +180,4 @@ const AppsProvider = ({ children }: PropsWithChildren) => {
   return <AppsContext.Provider value={value}>{children}</AppsContext.Provider>
 }
 
-export { AppsContext, AppsProvider, useLibraryMapFromFile }
+export { AppsContext, AppsProvider, useDownload, useLibraryMapFromFile }

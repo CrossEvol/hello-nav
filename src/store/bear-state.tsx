@@ -21,6 +21,11 @@ type Over = {
   overCategoryID: number
 }
 
+type Exports = {
+  navigations: AppItem[]
+  categories: CateItem[]
+}
+
 export type GridAppItem = {
   id?: number
   name: string
@@ -50,6 +55,7 @@ export interface FavoriteSlice {
 }
 
 export interface SharedSlice {
+  getExports: () => Exports
   getLibraryMap: () => LibraryMap
 }
 
