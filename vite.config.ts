@@ -10,6 +10,7 @@ export default defineConfig({
     },
   },
   build: {
+    target: 'esnext',
     chunkSizeWarningLimit: 800,
     rollupOptions: {
       output: {
