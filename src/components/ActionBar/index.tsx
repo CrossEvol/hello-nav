@@ -34,10 +34,35 @@ function ActionBar({
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
   const exports = useBearStore(state => state.getExports())
+  const imports = useBearStore(state => state.imports)
   const { downloadJson } = useDownload()
   const [canDrag, setCanDrag] = useAtom(CanDragAtom)
   const [, setOpen] = useAtom(OpenCreateModal)
   const [openDrawer, setOpenDrawer] = React.useState(false)
+
+  const handleFileUpload = () => {
+    const input = document.createElement('input')
+    input.type = 'file'
+    input.accept = '.json'
+    input.style.display = 'none'
+
+    input.onchange = (event: Event) => {
+      const file = (event.target as HTMLInputElement).files?.[0]
+      if (file) {
+        const reader = new FileReader()
+        reader.onload = e => {
+          const content = e.target?.result
+          imports(JSON.parse(content!.toString()))
+          // console.log(content)
+        }
+        reader.readAsText(file)
+      }
+    }
+
+    document.body.appendChild(input)
+    input.click()
+    document.body.removeChild(input)
+  }
 
   return (
     <>
@@ -86,7 +111,7 @@ function ActionBar({
                 <span
                   data-tooltip-id="my-tooltip-import"
                   className="filter-bar__toggle-btn text-xl"
-                  onClick={() => alert('3')}
+                  onClick={handleFileUpload}
                   onKeyDown={() => {}}
                 >
                   <TbDatabaseImport />

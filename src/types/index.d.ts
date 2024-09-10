@@ -7,8 +7,8 @@ declare interface AppItem {
   category?: string
   categoryID?: number
   keywords?: string[]
-  darkInvert?: true
-  lessRadius?: true
+  darkInvert?: boolean
+  lessRadius?: boolean
   favorite?: boolean
   hidden?: boolean
   first?: boolean

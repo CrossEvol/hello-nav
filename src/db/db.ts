@@ -8,15 +8,15 @@ export type Navigation = {
   repository?: string
   icon: string
   keywords?: string[]
-  darkInvert?: true
-  lessRadius?: true
+  darkInvert?: boolean
+  lessRadius?: boolean
   favorite?: boolean
   hidden?: boolean
   first?: boolean
   final?: boolean
   order?: number
   categoryID?: number
-  favoriteOrder: number
+  favoriteOrder?: number
 }
 
 export type Category = {
@@ -40,39 +40,6 @@ class NavAppDatabase extends Dexie {
 
   constructor() {
     super('NavAppDatabase')
-
-    /* TODO: did not migrate versions reasonably */
-    // this.version(3)
-    //   .stores({
-    //     navigations:
-    //       '++id, name, homepage, repository, icon, keywords, darkInvert, lessRadius, favorite, hidden, first, final, order, categoryID, favoriteOrder',
-    //     categories: '++id, name, order, icon',
-    //     config: '++id, categoryOrderID, navigationOrderID, favoriteOrderID',
-    //   })
-    //   .upgrade(tx => {
-    //     return tx
-    //       .table('config')
-    //       .toCollection()
-    //       .modify(c => {
-    //         c.favoriteOrderID = 0
-    //       })
-    //   })
-
-    // this.version(2)
-    //   .stores({
-    //     navigations:
-    //       '++id, name, homepage, repository, icon, keywords, darkInvert, lessRadius, favorite, hidden, first, final, order, categoryID, favoriteOrder',
-    //     categories: '++id, name, order, icon',
-    //     config: '++id, categoryOrderID, navigationOrderID',
-    //   })
-    //   .upgrade(tx => {
-    //     return tx
-    //       .table('navigations')
-    //       .toCollection()
-    //       .modify(navigation => {
-    //         navigation.favoriteOrder = 0
-    //       })
-    //   })
 
     this.version(1).stores({
       navigations:

@@ -1,3 +1,4 @@
+import { z } from 'zod'
 import { type ColourOption } from '../components/Select/select-data'
 import { type Category, type Navigation } from '../db/db'
 
@@ -22,8 +23,9 @@ type Over = {
 }
 
 type Exports = {
-  navigations: AppItem[]
-  categories: CateItem[]
+  categories: (Omit<CateItem, 'id' | 'order' | 'children'> & {
+    children: Omit<AppItem, 'id' | 'order' | 'categoryID' | 'favoriteOrder'>[]
+  })[]
 }
 
 export type GridAppItem = {
@@ -55,6 +57,7 @@ export interface FavoriteSlice {
 }
 
 export interface SharedSlice {
+  imports: (data: unknown) => void
   getExports: () => Exports
   getLibraryMap: () => LibraryMap
 }
@@ -69,3 +72,27 @@ export interface ConfigSlice {
 }
 
 export type BearState = SharedSlice & CategorySlice & NavigationSlice & FavoriteSlice & ConfigSlice
+
+// 定义 Zod schema
+const AppItemSchema = z.object({
+  name: z.string(),
+  homepage: z.string(),
+  repository: z.string().optional(),
+  icon: z.string(),
+  categoryID: z.number().optional(),
+  keywords: z.array(z.string()).optional(),
+  darkInvert: z.boolean().default(false),
+  lessRadius: z.boolean().default(false),
+  hidden: z.boolean().default(false),
+})
+
+const CategorySchema = z.object({
+  title: z.string(),
+  icon: z.string(),
+  order: z.number().optional(),
+  children: z.array(AppItemSchema),
+})
+
+export const ImportsSchema = z.object({
+  categories: z.array(CategorySchema),
+})

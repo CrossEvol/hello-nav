@@ -61,7 +61,7 @@ const Contain = (
                   {...cell}
                   title={cate?.title}
                   isSettingMode={isSettingMode}
-                  key={cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
+                  key={cell.id + cell.name + (cell.favorite ? '_fav' : '') + (cell.hidden ? '_hid' : '')}
                 />
               ))}
       </SortableContext>
