@@ -1,4 +1,6 @@
+import { useAtom } from 'jotai'
 import { Controller, type SubmitHandler, useForm } from 'react-hook-form'
+import { ChosenCategoryID } from '../../providers/jotai-provider'
 import { useBearStore } from '../../store'
 import ImageInput from '../Input/image-input'
 import TagsInput from '../Input/tags-input'
@@ -26,6 +28,7 @@ export type Navigation = {
 const CreateNavigationForm = ({ onSubmitCallback }: { onSubmitCallback?: () => void }) => {
   const navigationOrderID = useBearStore(state => state.navigationOrderID)
   const categoryOptions = useBearStore(state => state.getCategoryOptions())
+  const [chosenCategoryID] = useAtom(ChosenCategoryID)
   const addNavigation = useBearStore(state => state.addNavigation)
   const {
     register,
@@ -38,14 +41,13 @@ const CreateNavigationForm = ({ onSubmitCallback }: { onSubmitCallback?: () => v
       homepage: '',
       repository: '',
       order: navigationOrderID,
+      categoryID: chosenCategoryID,
       icon: '',
       keywords: [],
       darkInvert: true,
       lessRadius: true,
       favorite: false,
       hidden: false,
-      first: false,
-      final: false,
       favoriteOrder: 0,
     },
   })
@@ -130,11 +132,13 @@ const CreateNavigationForm = ({ onSubmitCallback }: { onSubmitCallback?: () => v
         <Controller
           name="categoryID"
           control={control}
+          disabled={!!chosenCategoryID}
           render={({ field }) => (
             <SingleSelect
               selectedOption={categoryOptions.find(item => item.value === field.value?.toString())!}
               setSelectedOption={option => field.onChange(Number(option.value))}
               options={categoryOptions}
+              isDisabled={field.disabled}
             />
           )}
         />

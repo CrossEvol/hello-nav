@@ -1,5 +1,7 @@
+import { useAtom } from 'jotai'
 import { useRef } from 'react'
 import Modal from 'react-modal'
+import { ChosenCategoryID } from '../../providers/jotai-provider'
 import CreateCategoryForm from '../Form/create-category-form'
 import CreateNavigationForm from '../Form/create-navigation-form'
 import TabsWrapper from '../Tabs/tabs-wrapper'
@@ -18,6 +20,7 @@ const customStyles = {
 }
 
 const CreateModal = ({ open, setOpen }: PropsWithOpen) => {
+  const [, setChosenCategoryID] = useAtom(ChosenCategoryID)
   const subtitleRef = useRef<HTMLHeadingElement>(null)
 
   const afterOpenModal = () => {
@@ -51,6 +54,7 @@ const CreateModal = ({ open, setOpen }: PropsWithOpen) => {
       <Modal
         isOpen={open}
         onAfterOpen={afterOpenModal}
+        onAfterClose={() => setChosenCategoryID(undefined)}
         onRequestClose={closeModal}
         style={customStyles}
         contentLabel="Example Modal"

@@ -13,10 +13,12 @@ const SingleSelect = ({
   selectedOption,
   setSelectedOption,
   options,
+  isDisabled = false,
 }: {
   selectedOption: ColourOption
   setSelectedOption: (option: ColourOption) => void
   options: ColourOption[]
+  isDisabled?: boolean
 }) => {
   const handleChange = (option: SingleValue<ColourOption>) => {
     if (option === null) {
@@ -31,6 +33,7 @@ const SingleSelect = ({
       <Select
         value={selectedOption}
         isMulti={false}
+        isDisabled={isDisabled}
         onChange={handleChange}
         isClearable
         styles={{

@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './components/App'
+import CreateModalRoot from './components/Modals/create-modal-root'
 import { AppsProvider } from './hooks/index'
 import './index.css'
 import JotaiProvider from './providers/jotai-provider'
@@ -12,6 +13,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <JotaiProvider>
         <ModalProvider>
           <App />
+          <CreateModalRoot />
         </ModalProvider>
       </JotaiProvider>
     </AppsProvider>

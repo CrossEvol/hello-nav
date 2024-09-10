@@ -13,11 +13,10 @@ import iconList from '../../assets/images/icon-list.svg'
 import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
-import { CanDragAtom } from '../../providers/jotai-provider'
+import { CanDragAtom, OpenCreateModal } from '../../providers/jotai-provider'
 import CategoryAgGrid from '../AgGrid/category-ag-grid'
 import NavigationAgGrid from '../AgGrid/navigation-ag-grid'
 import DrawerApp from '../Drawer/drawer-app'
-import CreateModal from '../Modals/create-modal'
 import PandaBtn from '../PandaBtn'
 import PopoverWrapper from '../Popover/popover-wrapper'
 import AdminTabsWrapper from '../Tabs/admin-tabs-wrapper'
@@ -33,7 +32,7 @@ function ActionBar({
   isSettingMode,
 }: FilterProps & { isSettingMode: boolean }) {
   const [canDrag, setCanDrag] = useAtom(CanDragAtom)
-  const [openCreateModal, setOpenCreateModal] = React.useState(false)
+  const [, setOpen] = useAtom(OpenCreateModal)
   const [openDrawer, setOpenDrawer] = React.useState(false)
 
   return (
@@ -43,7 +42,7 @@ function ActionBar({
           <span
             data-tooltip-id="my-tooltip-create"
             className="filter-bar__toggle-btn text-xl"
-            onClick={() => setOpenCreateModal(true)}
+            onClick={() => setOpen(true)}
             onKeyDown={() => {}}
           >
             <IoCreateOutline />
@@ -201,7 +200,6 @@ function ActionBar({
           secondaryTitle="category"
         />
       </DrawerApp>
-      <CreateModal open={openCreateModal} setOpen={setOpenCreateModal} />
     </>
   )
 }

@@ -12,7 +12,8 @@ import {
 import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'
-import { CanDragAtom } from '../../providers/jotai-provider'
+import { Tooltip as ReactTooltip } from 'react-tooltip'
+import { CanDragAtom, ChosenCategoryID, OpenCreateModal } from '../../providers/jotai-provider'
 import { useBearStore } from '../../store'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
@@ -70,7 +71,9 @@ const Contain = (
 }
 
 function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
+  const [, setChosenCategoryID] = useAtom(ChosenCategoryID)
   const [canDrag] = useAtom(CanDragAtom)
+  const [, setOpen] = useAtom(OpenCreateModal)
   const [isDragging, setIsDragging] = useState(false)
   const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
   const swapNavigation = useBearStore(state => state.swapNavigation)
@@ -95,10 +98,33 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
       if (apps.length) {
         vmList.push(
           <div className="category-item" key={cate.title}>
-            <h2 className="category-item__title" id={cate.title}>
-              {cate.title.toUpperCase()}
-            </h2>
+            {cate.id === 0 ? (
+              <h2 className="category-item__title" id={cate.title}>
+                {cate.title.toUpperCase()}
+              </h2>
+            ) : (
+              <div className="flex items-center justify-center">
+                <h2
+                  data-tooltip-id={`my-tooltip-create-${cate.id}`}
+                  className="category-item__title min-w-2 cursor-pointer"
+                  id={cate.title}
+                  onClick={() => {
+                    setChosenCategoryID(cate.id)
+                    setOpen(true)
+                  }}
+                >
+                  {cate.title.toUpperCase()}
+                </h2>
+              </div>
+            )}
             {Contain(apps, cate, { isSettingMode, type, canDrag })}
+            <ReactTooltip
+              id={`my-tooltip-create-${cate.id}`}
+              delayHide={1000}
+              place="bottom"
+              variant="light"
+              content={`+ ${cate.title}`}
+            />
           </div>,
         )
       }
