@@ -27,16 +27,18 @@ export const createFavoriteSlice: StateCreator<BearState, [], [], FavoriteSlice>
       const targetItem = await db.navigations.get(itemID)!
       if (!targetItem) {
         console.error(`can not find navigation itemID#${itemID}`)
-        return
+        return -1
       }
       if (targetItem.favorite) {
         await db.navigations.update(itemID, { favorite: false, favoriteOrder: 0 })
+        return -1
+      } else {
+        const config = await db.config.get(1)
+        const nextFavoriteOrder = config!.favoriteOrderID! + 1
+        await db.config.update(1, { favoriteOrderID: nextFavoriteOrder })
+        await db.navigations.update(itemID, { favorite: true, favoriteOrder: nextFavoriteOrder })
+        return nextFavoriteOrder
       }
-      const config = await db.config.get(1)
-      const nextFavoriteOrder = config!.favoriteOrderID! + 1
-      await db.config.update(1, { favoriteOrderID: nextFavoriteOrder })
-      await db.navigations.update(itemID, { favorite: true, favoriteOrder: nextFavoriteOrder })
-      return nextFavoriteOrder
     })
     return set({
       navigations: get().navigations.map(e =>
