@@ -2,7 +2,10 @@ import { useAtom } from 'jotai'
 import React from 'react'
 import { HiOutlineEllipsisVertical } from 'react-icons/hi2'
 import { IoCreateOutline } from 'react-icons/io5'
-import { RiDragDropFill, RiDragDropLine } from 'react-icons/ri'
+import { MdOutlineInsertPageBreak } from 'react-icons/md'
+import { PiSwap } from 'react-icons/pi'
+import { RiDragDropFill } from 'react-icons/ri'
+import { RxValueNone } from 'react-icons/rx'
 import { SiNginxproxymanager } from 'react-icons/si'
 import { TbDatabaseImport, TbPackageExport } from 'react-icons/tb'
 import { ReactSVG } from 'react-svg'
@@ -14,7 +17,7 @@ import iconSearch from '../../assets/images/icon-search.svg'
 import iconSettingActive from '../../assets/images/icon-setting-active.svg'
 import iconSetting from '../../assets/images/icon-setting.svg'
 import { useDownload } from '../../hooks'
-import { CanDragAtom, OpenCreateModal } from '../../providers/jotai-provider'
+import { DragStateAtom, OpenCreateModal } from '../../providers/jotai-provider'
 import { useBearStore } from '../../store'
 import CategoryAgGrid from '../AgGrid/category-ag-grid'
 import NavigationAgGrid from '../AgGrid/navigation-ag-grid'
@@ -36,11 +39,11 @@ function ActionBar({
   const exports = useBearStore(state => state.getExports())
   const imports = useBearStore(state => state.imports)
   const { downloadJson } = useDownload()
-  const [canDrag, setCanDrag] = useAtom(CanDragAtom)
+  const [dragState, setDragState] = useAtom(DragStateAtom)
   const [, setOpen] = useAtom(OpenCreateModal)
   const [openDrawer, setOpenDrawer] = React.useState(false)
 
-  const handleFileUpload = () => {
+  const handleDataImport = () => {
     const input = document.createElement('input')
     input.type = 'file'
     input.accept = '.json'
@@ -76,14 +79,44 @@ function ActionBar({
           >
             <IoCreateOutline />
           </span>
-          <span
-            data-tooltip-id="my-tooltip-canDrag"
-            className="filter-bar__toggle-btn text-xl"
-            onClick={() => setCanDrag(!canDrag)}
-            onKeyDown={() => {}}
-          >
-            {canDrag ? <RiDragDropLine /> : <RiDragDropFill />}
-          </span>
+          <PopoverWrapper
+            triggerElement={
+              <span data-tooltip-id="my-tooltip-drag" className="filter-bar__toggle-btn text-xl" onKeyDown={() => {}}>
+                <RiDragDropFill />
+              </span>
+            }
+            content={
+              <div className="m-1 flex flex-row justify-center space-x-2 text-slate-700">
+                <span
+                  data-tooltip-id="my-tooltip-drag-none"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => setDragState('none')}
+                  onKeyDown={() => {}}
+                >
+                  <RxValueNone className={`${dragState === 'none' ? 'bg-stone-600 text-white' : undefined}`} />
+                </span>
+                <span
+                  data-tooltip-id="my-tooltip-drag-insert"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => setDragState('insert')}
+                  onKeyDown={() => {}}
+                >
+                  <MdOutlineInsertPageBreak
+                    className={`${dragState === 'insert' ? 'bg-stone-600 text-white' : undefined}`}
+                  />
+                </span>
+                <span
+                  data-tooltip-id="my-tooltip-drag-swap"
+                  className="filter-bar__toggle-btn text-xl"
+                  onClick={() => setDragState('swap')}
+                  onKeyDown={() => {}}
+                >
+                  <PiSwap className={`${dragState === 'swap' ? 'bg-stone-600 text-white' : undefined}`} />
+                </span>
+              </div>
+            }
+            position="below"
+          />
           <PopoverWrapper
             triggerElement={
               <span className="filter-bar__toggle-btn text-xl" onClick={() => {}} onKeyDown={() => {}}>
@@ -111,7 +144,7 @@ function ActionBar({
                 <span
                   data-tooltip-id="my-tooltip-import"
                   className="filter-bar__toggle-btn text-xl"
-                  onClick={handleFileUpload}
+                  onClick={handleDataImport}
                   onKeyDown={() => {}}
                 >
                   <TbDatabaseImport />
@@ -155,17 +188,21 @@ function ActionBar({
         </span>
         <ReactTooltip id="my-tooltip-create" place="bottom" variant="light" content="create" />
         <ReactTooltip id="my-tooltip-admin" place="bottom" variant="light" content="admin" />
-        <ReactTooltip
+        <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
+        <ReactTooltip id="my-tooltip-import" place="bottom" variant="light" content="import" />
+        {/* <ReactTooltip
           id="my-tooltip-canDrag"
           place="bottom"
           variant="light"
           content={canDrag ? 'CanDrag' : 'CanNotDrag'}
-        />
-        <ReactTooltip id="my-tooltip-export" place="bottom" variant="light" content="export" />
-        <ReactTooltip id="my-tooltip-import" place="bottom" variant="light" content="import" />
+        /> */}
         <ReactTooltip id="my-tooltip-1" place="bottom" variant="light" content="theme" />
         <ReactTooltip id="my-tooltip-2" place="bottom" variant="light" content="group" />
         <ReactTooltip id="my-tooltip-3" place="bottom" variant="light" content="setting" />
+        <ReactTooltip id="my-tooltip-drag" place="top" variant="light" content={dragState} />
+        <ReactTooltip id="my-tooltip-drag-none" place="bottom" variant="light" content="none" />
+        <ReactTooltip id="my-tooltip-drag-swap" place="bottom" variant="light" content="swap" />
+        <ReactTooltip id="my-tooltip-drag-insert" place="bottom" variant="light" content="insert" />
       </div>
       <DrawerApp
         open={openDrawer}

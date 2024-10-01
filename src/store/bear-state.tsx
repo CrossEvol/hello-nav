@@ -46,6 +46,7 @@ export interface NavigationSlice {
   navigations: AppItem[]
   getNavigationsForGrid: () => GridAppItem[]
   swapNavigation: (active: Active, over: Over) => void
+  insertNavigation: (active: Active, over: Over) => void
   addNavigation: (category: Omit<Navigation, 'id'>) => void
 }
 

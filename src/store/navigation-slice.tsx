@@ -90,4 +90,71 @@ export const createNavigationSlice: StateCreator<BearState, [], [], NavigationSl
     }
     return set({ navigations })
   },
+  insertNavigation: async (active, over) => {
+    const { activeID, activeCategoryID } = active
+    const { overID, overCategoryID } = over
+    const activeItem = get().navigations.find(item => item.id === activeID)!
+    const overItem = get().navigations.find(item => item.id === overID)!
+
+    // when drag inside favorite, target inside favorite then swap , other nothing happened
+    if (activeCategoryID === 0) {
+      if (overCategoryID === 0) {
+        const navigations = get()
+          .navigations.map(item => (item.id === activeID ? { ...item, favoriteOrder: overItem.favoriteOrder } : item))
+          .map(item =>
+            item.favoriteOrder! >= overItem.favoriteOrder! ? { ...item, favoriteOrder: item.favoriteOrder! + 1 } : item,
+          )
+        await db.transaction('rw', db.navigations, async () => {
+          await Promise.all(
+            navigations
+              .filter(item => item.favorite)
+              .map(async (item, index) => await db.navigations.update(item.id, { favoriteOrder: index + 1 })),
+          )
+        })
+        return set({
+          navigations,
+        })
+      } else {
+        return set({ navigations: get().navigations })
+      }
+    }
+
+    const navigations =
+      activeCategoryID === overCategoryID
+        ? get()
+            .navigations.map(item => (item.order! >= overItem.order! ? { ...item, order: item.order! + 1 } : item))
+            .map(item => (item.id === activeID ? { ...item, order: overItem?.order } : item))
+            .map(item => (item.id === overID ? { ...item, order: activeItem?.order } : item))
+        : get()
+            .navigations.map(item => (item.order! >= overItem.order! ? { ...item, order: item.order! + 1 } : item))
+            .map(item =>
+              item.id === activeID
+                ? { ...overItem, id: activeItem.id, order: activeItem?.order, categoryID: activeItem.categoryID }
+                : item,
+            )
+            .map(item =>
+              item.id === overID
+                ? { ...activeItem, id: overItem.id, order: overItem?.order, categoryID: overItem.categoryID }
+                : item,
+            )
+    /* TODO: later deal with the database */
+    // try {
+    //   if (activeCategoryID === overCategoryID) {
+    //     await db.transaction('rw', db.navigations, async () => {
+    //       await db.navigations.update(activeID, { order: overItem.order })
+    //       await db.navigations.update(overID, { order: activeItem.order })
+    //     })
+    //   } else {
+    //     await db.transaction('rw', db.navigations, async () => {
+    //       await db.navigations.update(activeID, { order: overItem.order, categoryID: overItem.categoryID })
+    //       await db.navigations.update(overID, { order: activeItem.order, categoryID: activeItem.categoryID })
+    //     })
+    //   }
+    // } catch (error) {
+    //   console.error('transaction about swap order between navigations failed: ')
+    //   console.error(error)
+    //   throw error
+    // }
+    return set({ navigations })
+  },
 })

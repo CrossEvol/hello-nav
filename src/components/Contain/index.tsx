@@ -13,7 +13,7 @@ import { SortableContext, sortableKeyboardCoordinates, verticalListSortingStrate
 import { useAtom } from 'jotai'
 import React, { useState } from 'react'
 import { Tooltip as ReactTooltip } from 'react-tooltip'
-import { CanDragAtom, ChosenCategoryID, OpenCreateModal } from '../../providers/jotai-provider'
+import { ChosenCategoryID, type DragState, DragStateAtom, OpenCreateModal } from '../../providers/jotai-provider'
 import { useBearStore } from '../../store'
 import Cell from '../Cell'
 import { SortableItem } from '../Dnd/sortable-item'
@@ -25,11 +25,11 @@ const Contain = (
   {
     isSettingMode,
     type,
-    canDrag,
+    dragState,
   }: {
     isSettingMode: boolean
     type: CategoryType
-    canDrag: boolean
+    dragState: DragState
   },
 ) => {
   return (
@@ -38,7 +38,7 @@ const Contain = (
         items={list.map(item => ({ ...item, id: item.id!.toString() }))}
         strategy={verticalListSortingStrategy}
       >
-        {type === 'category' && canDrag
+        {type === 'category' && dragState !== 'none'
           ? list
               .filter(cell => !!cell.id)
               .map(cell => (
@@ -72,11 +72,13 @@ const Contain = (
 
 function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & { isSettingMode: boolean }) {
   const [, setChosenCategoryID] = useAtom(ChosenCategoryID)
-  const [canDrag] = useAtom(CanDragAtom)
+  // const [canDrag] = useAtom(CanDragAtom)
+  const [dragState] = useAtom(DragStateAtom)
   const [, setOpen] = useAtom(OpenCreateModal)
   const [isDragging, setIsDragging] = useState(false)
   const [draggingItem, setDraggingItem] = useState<AppItem | null>(null)
   const swapNavigation = useBearStore(state => state.swapNavigation)
+  const insertNavigation = useBearStore(state => state.insertNavigation)
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
@@ -90,7 +92,7 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
       // (appItems as CateItem[]).flatMap(cateItem => cateItem.children),
       appItems as AppItem[],
       null,
-      { isSettingMode, type, canDrag },
+      { isSettingMode, type, dragState },
     )
   } else if (type === 'category') {
     contain = (appItems as CateItem[]).reduce((vmList: React.ReactElement[], cate: CateItem) => {
@@ -117,7 +119,7 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
                 </h2>
               </div>
             )}
-            {Contain(apps, cate, { isSettingMode, type, canDrag })}
+            {Contain(apps, cate, { isSettingMode, type, dragState })}
             <ReactTooltip
               id={`my-tooltip-create-${cate.id}`}
               delayHide={1000}
@@ -143,10 +145,17 @@ function ContainWrap({ list: appItems, type, isSettingMode }: ContainWrapProp & 
     // console.log(over)
 
     if (active.id !== over!.id) {
-      swapNavigation(
-        { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
-        { overID: Number(overID), overCategoryID: Number(overCategoryID) },
-      )
+      if (dragState === 'swap') {
+        swapNavigation(
+          { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
+          { overID: Number(overID), overCategoryID: Number(overCategoryID) },
+        )
+      } else if (dragState === 'insert') {
+        insertNavigation(
+          { activeID: Number(activeID), activeCategoryID: Number(activeCategoryID) },
+          { overID: Number(overID), overCategoryID: Number(overCategoryID) },
+        )
+      }
       setIsDragging(false)
     }
   }
