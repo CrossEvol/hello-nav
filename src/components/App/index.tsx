@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai'
-import { useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { AppsContext } from '../../hooks/index'
 import { TypeAtom } from '../../providers/jotai-provider'
 import { useBearStore } from '../../store'
